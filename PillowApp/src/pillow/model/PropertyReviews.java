@@ -1,38 +1,53 @@
 package pillow.model;
 
-public class PropertyReviews {
+import java.util.Date;
+
+public class PropertyReviews extends Reviews {
 	protected Reviews review;
 	protected Properties property;
-	protected String Reviewer;
-	
-	public PropertyReviews(Reviews review, Properties property, String reviewer) {
+	protected Tenants Reviewer;
+
+	public PropertyReviews(int reviewId, Date created, float rating, String content,
+			Reviews review, Properties property, Tenants reviewer) {
+		super(reviewId, created, rating, content);
 		this.review = review;
 		this.property = property;
-		this.Reviewer = reviewer;
+		Reviewer = reviewer;
 	}
-	public PropertyReviews(Reviews review) {
+
+	public PropertyReviews(int reviewId) {
+		super(reviewId);
+	}
+
+	public PropertyReviews(Date created, float rating, String content,
+			Reviews review, Properties property, Tenants reviewer) {
+		super(created, rating, content);
 		this.review = review;
-	}
-	public PropertyReviews(Properties property, String reviewer) {
 		this.property = property;
-		this.Reviewer = reviewer;
+		Reviewer = reviewer;
 	}
+
 	public Reviews getReview() {
 		return review;
 	}
+
 	public void setReview(Reviews review) {
 		this.review = review;
 	}
+
 	public Properties getProperty() {
 		return property;
 	}
+
 	public void setProperty(Properties property) {
 		this.property = property;
 	}
-	public String getReviewer() {
+
+	public Tenants getReviewer() {
 		return Reviewer;
 	}
-	public void setReviewer(String reviewer) {
-		this.Reviewer = reviewer;
+
+	public void setReviewer(Tenants reviewer) {
+		Reviewer = reviewer;
 	}
 }

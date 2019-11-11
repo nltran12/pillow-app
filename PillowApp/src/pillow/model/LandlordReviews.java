@@ -1,39 +1,46 @@
 package pillow.model;
 
-public class LandlordReviews {
+import java.util.Date;
+
+public class LandlordReviews extends Reviews {
 	protected Reviews review;
-	protected String Reviewer;
+	protected Tenants Reviewer;
 	protected Landlords Landlord;
-	
-	public LandlordReviews(Reviews review, String reviewer, Landlords landlord) {
+
+	public LandlordReviews(int reviewId, Date created, float rating, String content,
+			Reviews review, Tenants reviewer, Landlords landlord) {
+		super(reviewId, created, rating, content);
 		this.review = review;
-		this.Reviewer = reviewer;
-		this.Landlord = landlord;
+		Reviewer = reviewer;
+		Landlord = landlord;
 	}
-	
-	public LandlordReviews(Reviews review) {
+
+	public LandlordReviews(int reviewId) {
+		super(reviewId);
+	}
+
+	public LandlordReviews(Date created, float rating, String content, Reviews review,
+			Tenants reviewer, Landlords landlord) {
+		super(created, rating, content);
 		this.review = review;
+		Reviewer = reviewer;
+		Landlord = landlord;
 	}
-	
-	public LandlordReviews(String reviewer, Landlords landlord) {
-		this.Reviewer = reviewer;
-		this.Landlord = landlord;
-	}
-	
-	public Reviews getReviewId() {
+
+	public Reviews getReview() {
 		return review;
 	}
 
-	public void setReviewId(Reviews reviewId) {
-		this.review = reviewId;
+	public void setReview(Reviews review) {
+		this.review = review;
 	}
 
-	public String getReviewer() {
+	public Tenants getReviewer() {
 		return Reviewer;
 	}
 
-	public void setReviewer(String reviewer) {
-		this.Reviewer = reviewer;
+	public void setReviewer(Tenants reviewer) {
+		Reviewer = reviewer;
 	}
 
 	public Landlords getLandlord() {
@@ -41,11 +48,6 @@ public class LandlordReviews {
 	}
 
 	public void setLandlord(Landlords landlord) {
-		this.Landlord = landlord;
+		Landlord = landlord;
 	}
-	
-	
-	
-	
-
 }

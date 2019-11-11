@@ -1,22 +1,29 @@
 package pillow.model;
 
-public class TenantReviews {
+import java.util.Date;
+
+public class TenantReviews extends Reviews {
 	protected Reviews Review;
-	protected String Reviewer;
+	protected Landlords Reviewer;
 	protected Tenants tenant;
-	
-	public TenantReviews(Reviews review, String reviewer, Tenants tenant) {
-		this.Review = review;
-		this.Reviewer = reviewer;
+
+	public TenantReviews(int reviewId, Date created, float rating, String content,
+			Reviews review, Landlords reviewer, Tenants tenant) {
+		super(reviewId, created, rating, content);
+		Review = review;
+		Reviewer = reviewer;
 		this.tenant = tenant;
 	}
-	
-	public TenantReviews(Reviews review) {
-		this.Review = review;
+
+	public TenantReviews(int reviewId) {
+		super(reviewId);
 	}
-	
-	public TenantReviews(String reviewer, Tenants tenant) {
-		this.Reviewer = reviewer;
+
+	public TenantReviews(Date created, float rating, String content,
+			Reviews review, Landlords reviewer, Tenants tenant) {
+		super(created, rating, content);
+		Review = review;
+		Reviewer = reviewer;
 		this.tenant = tenant;
 	}
 
@@ -25,15 +32,15 @@ public class TenantReviews {
 	}
 
 	public void setReview(Reviews review) {
-		this.Review = review;
+		Review = review;
 	}
 
-	public String getReviewer() {
+	public Landlords getReviewer() {
 		return Reviewer;
 	}
 
-	public void setReviewer(String reviewer) {
-		this.Reviewer = reviewer;
+	public void setReviewer(Landlords reviewer) {
+		Reviewer = reviewer;
 	}
 
 	public Tenants getTenant() {
@@ -42,5 +49,5 @@ public class TenantReviews {
 
 	public void setTenant(Tenants tenant) {
 		this.tenant = tenant;
-	}	
+	}
 }

@@ -18,7 +18,6 @@ public class Tenants extends Users {
 	public Tenants(String userName) {
 		super(userName);
 	}
-	
 
 	public int getCreditScore() {
 		return CreditScore;
