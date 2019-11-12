@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import pillow.model.Properties;
+import pillow.model.Users;
 
 public class PropertiesDao {
   protected ConnectionManager connectionManager;
@@ -26,7 +28,8 @@ public class PropertiesDao {
     String insertProperty =
         "INSERT INTO Properties(UserName,Title,Description,Transit,Picture,Street,"
             + "Neighborhood,City,State,Zip,Latitude,Longitude,PropertyType,RoomType,Accomodates,"
-            + "Bathrooms,Bedrooms,MonthlyPrice,SecurityDesposit,Available) VALUES(?,?,?,?);";
+            + "Bathrooms,Bedrooms,MonthlyPrice,SecurityDesposit,Available) VALUES(?,?,?,?,?,?,?,"
+            + "?,?,?,?,?,?,?,?,?,?,?,?,?);";
     Connection connection = null;
     PreparedStatement insertStmt = null;
     ResultSet resultKey = null;
@@ -39,6 +42,21 @@ public class PropertiesDao {
       insertStmt.setString(3, property.getDescription());
       insertStmt.setBoolean(4, property.isTransit());
       insertStmt.setString(5, property.getPicture());
+      insertStmt.setString(6, property.getStreet());
+      insertStmt.setString(7, property.getNeighborhood());
+      insertStmt.setString(8, property.getCity());
+      insertStmt.setString(9, property.getState());
+      insertStmt.setInt(10, property.getZip());
+      insertStmt.setFloat(11, property.getLatitude());
+      insertStmt.setFloat(12, property.getLongitude());
+      insertStmt.setString(13, property.getPropertyType());
+      insertStmt.setString(14, property.getRoomType());
+      insertStmt.setInt(15, property.getAccomodates());
+      insertStmt.setFloat(16, property.getBathrooms());
+      insertStmt.setInt(17, property.getBedrooms());
+      insertStmt.setFloat(18, property.getMonthlyPrice());
+      insertStmt.setFloat(19, property.getSecurityDeposit());
+      insertStmt.setBoolean(20, property.isAvailable());
 
       insertStmt.executeUpdate();
 
@@ -68,4 +86,203 @@ public class PropertiesDao {
     }
   }
 
+  public Properties getPropertiesById(int propertyId) throws SQLException {
+    String selectProperty =
+        "SELECT * FROM Properties WHERE PropertyId=?;";
+    Connection connection = null;
+    PreparedStatement selectStmt = null;
+    ResultSet results = null;
+    try {
+      connection = connectionManager.getConnection();
+      selectStmt = connection.prepareStatement(selectProperty);
+      selectStmt.setInt(1, propertyId);
+      results = selectStmt.executeQuery();
+      UsersDao usersDao = UsersDao.getInstance();
+      if(results.next()) {
+        int resultPropertyId = results.getInt("PropertyId");
+        String userName = results.getString("UserName");
+        String title = results.getString("Title");
+        String description = results.getString("Description");
+        boolean transit = results.getBoolean("Transit");
+        String picture = results.getString("Picture");
+        String street = results.getString("Street");
+        String neighborhood = results.getString("Neighborhood");
+        String city = results.getString("City");
+        String state = results.getString("State");
+        int zip = results.getInt("Zip");
+        float latitude = results.getFloat("Latitude");
+        float longitude = results.getFloat("Longitude");
+        String propertyType = results.getString("PropertyType");
+        String roomType = results.getString("RoomType");
+        int accommodates = results.getInt("Accommodates");
+        float bathrooms = results.getFloat("Bathrooms");
+        int bedrooms = results.getInt("Bedrooms");
+        float monthlyPrice = results.getFloat("MonthlyPrice");
+        float securityDeposit = results.getFloat("SecurityDeposit");
+        boolean available = results.getBoolean("Available");
+
+        Users user = usersDao.getUserByUserName(userName);
+
+        return new Properties(resultPropertyId, user, title, description, transit, picture,
+            street, neighborhood, city, state, zip, latitude, longitude, propertyType, roomType,
+            accommodates, bathrooms, bedrooms, monthlyPrice, securityDeposit, available);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(selectStmt != null) {
+        selectStmt.close();
+      }
+      if(results != null) {
+        results.close();
+      }
+    }
+    return null;
+  }
+
+  public List<Properties> getPropertiesByNeighborhood(String neighborhood) throws SQLException {
+    List<Properties> properties = new ArrayList<Properties>();
+    String selectProperty =
+        "SELECT * FROM Properties WHERE Neighborhood=?;";
+    Connection connection = null;
+    PreparedStatement selectStmt = null;
+    ResultSet results = null;
+    try {
+      connection = connectionManager.getConnection();
+      selectStmt = connection.prepareStatement(selectProperty);
+      selectStmt.setString(1, neighborhood);
+      results = selectStmt.executeQuery();
+      UsersDao usersDao = UsersDao.getInstance();
+      while (results.next()) {
+        int propertyId = results.getInt("PropertyId");
+        String userName = results.getString("UserName");
+        String title = results.getString("Title");
+        String description = results.getString("Description");
+        boolean transit = results.getBoolean("Transit");
+        String picture = results.getString("Picture");
+        String street = results.getString("Street");
+        String resultNeighborhood = results.getString("Neighborhood");
+        String city = results.getString("City");
+        String state = results.getString("State");
+        int zip = results.getInt("Zip");
+        float latitude = results.getFloat("Latitude");
+        float longitude = results.getFloat("Longitude");
+        String propertyType = results.getString("PropertyType");
+        String roomType = results.getString("RoomType");
+        int accommodates = results.getInt("Accommodates");
+        float bathrooms = results.getFloat("Bathrooms");
+        int bedrooms = results.getInt("Bedrooms");
+        float monthlyPrice = results.getFloat("MonthlyPrice");
+        float securityDeposit = results.getFloat("SecurityDeposit");
+        boolean available = results.getBoolean("Available");
+
+        Users user = usersDao.getUserByUserName(userName);
+        Properties property = new Properties(propertyId, user, title, description, transit,
+            picture, street, resultNeighborhood, city, state, zip, latitude, longitude, propertyType,
+            roomType, accommodates, bathrooms, bedrooms, monthlyPrice, securityDeposit, available);
+        properties.add(property);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(selectStmt != null) {
+        selectStmt.close();
+      }
+      if(results != null) {
+        results.close();
+      }
+    }
+    return properties;
+  }
+
+  public List<Properties> getPropertiesByAvailability(boolean availability) throws SQLException {
+    List<Properties> properties = new ArrayList<Properties>();
+    String selectProperty =
+        "SELECT * FROM Properties WHERE Available=?;";
+    Connection connection = null;
+    PreparedStatement selectStmt = null;
+    ResultSet results = null;
+    try {
+      connection = connectionManager.getConnection();
+      selectStmt = connection.prepareStatement(selectProperty);
+      selectStmt.setBoolean(1, availability);
+      results = selectStmt.executeQuery();
+      UsersDao usersDao = UsersDao.getInstance();
+      while (results.next()) {
+        int propertyId = results.getInt("PropertyId");
+        String userName = results.getString("UserName");
+        String title = results.getString("Title");
+        String description = results.getString("Description");
+        boolean transit = results.getBoolean("Transit");
+        String picture = results.getString("Picture");
+        String street = results.getString("Street");
+        String neighborhood = results.getString("Neighborhood");
+        String city = results.getString("City");
+        String state = results.getString("State");
+        int zip = results.getInt("Zip");
+        float latitude = results.getFloat("Latitude");
+        float longitude = results.getFloat("Longitude");
+        String propertyType = results.getString("PropertyType");
+        String roomType = results.getString("RoomType");
+        int accommodates = results.getInt("Accommodates");
+        float bathrooms = results.getFloat("Bathrooms");
+        int bedrooms = results.getInt("Bedrooms");
+        float monthlyPrice = results.getFloat("MonthlyPrice");
+        float securityDeposit = results.getFloat("SecurityDeposit");
+        boolean resultAvailable = results.getBoolean("Available");
+
+        Users user = usersDao.getUserByUserName(userName);
+        Properties property = new Properties(propertyId, user, title, description, transit,
+            picture, street, neighborhood, city, state, zip, latitude, longitude, propertyType,
+            roomType, accommodates, bathrooms, bedrooms, monthlyPrice, securityDeposit, resultAvailable);
+        properties.add(property);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(selectStmt != null) {
+        selectStmt.close();
+      }
+      if(results != null) {
+        results.close();
+      }
+    }
+    return properties;
+  }
+
+  public Properties delete(Properties property) throws SQLException {
+    String deleteProperty = "DELETE FROM Properties WHERE PropertyId=?;";
+    Connection connection = null;
+    PreparedStatement deleteStmt = null;
+    try {
+      connection = connectionManager.getConnection();
+      deleteStmt = connection.prepareStatement(deleteProperty);
+      deleteStmt.setInt(1, property.getPropertyId());
+      deleteStmt.executeUpdate();
+
+      return null;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(deleteStmt != null) {
+        deleteStmt.close();
+      }
+    }
+  }
 }

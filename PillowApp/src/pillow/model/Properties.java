@@ -10,6 +10,7 @@ public class Properties {
 	protected String Street;
 	protected String Neighborhood;
 	protected String City;
+	protected String State;
 	protected int Zip;
 	protected float Latitude;
 	protected float Longitude;
@@ -21,44 +22,12 @@ public class Properties {
 	protected float MonthlyPrice;
 	protected float SecurityDeposit;
 	protected boolean Available;
-	
-	public Properties(int propertyId, Users user, String title, String description, boolean transit, String picture,
-			String street, String neighborhood, String city, int zip, float latitude, float longitude,
-			String propertyType, String roomType, int accomodates, float bathrooms, int bedrooms, float monthlyPrice,
-			float securityDeposit, boolean available) {
-		this.PropertyId = propertyId;
-		this.user = user;
-		this.Title = title;
-		this.Description = description;
-		this.Transit = transit;
-		this.Picture = picture;
-		this.Street = street;
-		this.Neighborhood = neighborhood;
-		this.City = city;
-		this.Zip = zip;
-		this.Latitude = latitude;
-		this.Longitude = longitude;
-		this.PropertyType = propertyType;
-		this.RoomType = roomType;
-		this.Accomodates = accomodates;
-		this.Bathrooms = bathrooms;
-		this.Bedrooms = bedrooms;
-		this.MonthlyPrice = monthlyPrice;
-		this.SecurityDeposit = securityDeposit;
-		this.Available = available;
-	}
-	
-	
-	public Properties(int propertyId) {
-		this.PropertyId = propertyId;
-	}
-	
 
-	public Properties(Users user, String title, String description, boolean transit, String picture, String street,
-			String neighborhood, String city, int zip, float latitude, float longitude, String propertyType,
-			String roomType, int accomodates, float bathrooms, int bedrooms, float monthlyPrice, float securityDeposit,
-			boolean available) {
-		super();
+	public Properties(int propertyId, Users user, String title, String description, boolean transit,
+			String picture, String street, String neighborhood, String city, String state, int zip,
+			float latitude, float longitude, String propertyType, String roomType, int accomodates,
+			float bathrooms, int bedrooms, float monthlyPrice, float securityDeposit, boolean available) {
+		PropertyId = propertyId;
 		this.user = user;
 		Title = title;
 		Description = description;
@@ -67,6 +36,37 @@ public class Properties {
 		Street = street;
 		Neighborhood = neighborhood;
 		City = city;
+		State = state;
+		Zip = zip;
+		Latitude = latitude;
+		Longitude = longitude;
+		PropertyType = propertyType;
+		RoomType = roomType;
+		Accomodates = accomodates;
+		Bathrooms = bathrooms;
+		Bedrooms = bedrooms;
+		MonthlyPrice = monthlyPrice;
+		SecurityDeposit = securityDeposit;
+		Available = available;
+	}
+
+	public Properties(int propertyId) {
+		PropertyId = propertyId;
+	}
+
+	public Properties(Users user, String title, String description, boolean transit,
+			String picture, String street, String neighborhood, String city, String state, int zip,
+			float latitude, float longitude, String propertyType, String roomType, int accomodates,
+			float bathrooms, int bedrooms, float monthlyPrice, float securityDeposit, boolean available) {
+		this.user = user;
+		Title = title;
+		Description = description;
+		Transit = transit;
+		Picture = picture;
+		Street = street;
+		Neighborhood = neighborhood;
+		City = city;
+		State = state;
 		Zip = zip;
 		Latitude = latitude;
 		Longitude = longitude;
@@ -85,7 +85,7 @@ public class Properties {
 	}
 
 	public void setPropertyId(int propertyId) {
-		this.PropertyId = propertyId;
+		PropertyId = propertyId;
 	}
 
 	public Users getUser() {
@@ -101,7 +101,7 @@ public class Properties {
 	}
 
 	public void setTitle(String title) {
-		this.Title = title;
+		Title = title;
 	}
 
 	public String getDescription() {
@@ -109,7 +109,7 @@ public class Properties {
 	}
 
 	public void setDescription(String description) {
-		this.Description = description;
+		Description = description;
 	}
 
 	public boolean isTransit() {
@@ -117,7 +117,7 @@ public class Properties {
 	}
 
 	public void setTransit(boolean transit) {
-		this.Transit = transit;
+		Transit = transit;
 	}
 
 	public String getPicture() {
@@ -125,7 +125,7 @@ public class Properties {
 	}
 
 	public void setPicture(String picture) {
-		this.Picture = picture;
+		Picture = picture;
 	}
 
 	public String getStreet() {
@@ -133,7 +133,7 @@ public class Properties {
 	}
 
 	public void setStreet(String street) {
-		this.Street = street;
+		Street = street;
 	}
 
 	public String getNeighborhood() {
@@ -141,7 +141,7 @@ public class Properties {
 	}
 
 	public void setNeighborhood(String neighborhood) {
-		this.Neighborhood = neighborhood;
+		Neighborhood = neighborhood;
 	}
 
 	public String getCity() {
@@ -149,7 +149,15 @@ public class Properties {
 	}
 
 	public void setCity(String city) {
-		this.City = city;
+		City = city;
+	}
+
+	public String getState() {
+		return State;
+	}
+
+	public void setState(String state) {
+		State = state;
 	}
 
 	public int getZip() {
@@ -157,7 +165,7 @@ public class Properties {
 	}
 
 	public void setZip(int zip) {
-		this.Zip = zip;
+		Zip = zip;
 	}
 
 	public float getLatitude() {
@@ -165,7 +173,7 @@ public class Properties {
 	}
 
 	public void setLatitude(float latitude) {
-		this.Latitude = latitude;
+		Latitude = latitude;
 	}
 
 	public float getLongitude() {
@@ -173,7 +181,7 @@ public class Properties {
 	}
 
 	public void setLongitude(float longitude) {
-		this.Longitude = longitude;
+		Longitude = longitude;
 	}
 
 	public String getPropertyType() {
@@ -181,7 +189,7 @@ public class Properties {
 	}
 
 	public void setPropertyType(String propertyType) {
-		this.PropertyType = propertyType;
+		PropertyType = propertyType;
 	}
 
 	public String getRoomType() {
@@ -189,7 +197,7 @@ public class Properties {
 	}
 
 	public void setRoomType(String roomType) {
-		this.RoomType = roomType;
+		RoomType = roomType;
 	}
 
 	public int getAccomodates() {
@@ -197,7 +205,7 @@ public class Properties {
 	}
 
 	public void setAccomodates(int accomodates) {
-		this.Accomodates = accomodates;
+		Accomodates = accomodates;
 	}
 
 	public float getBathrooms() {
@@ -205,7 +213,7 @@ public class Properties {
 	}
 
 	public void setBathrooms(float bathrooms) {
-		this.Bathrooms = bathrooms;
+		Bathrooms = bathrooms;
 	}
 
 	public int getBedrooms() {
@@ -213,7 +221,7 @@ public class Properties {
 	}
 
 	public void setBedrooms(int bedrooms) {
-		this.Bedrooms = bedrooms;
+		Bedrooms = bedrooms;
 	}
 
 	public float getMonthlyPrice() {
@@ -221,7 +229,7 @@ public class Properties {
 	}
 
 	public void setMonthlyPrice(float monthlyPrice) {
-		this.MonthlyPrice = monthlyPrice;
+		MonthlyPrice = monthlyPrice;
 	}
 
 	public float getSecurityDeposit() {
@@ -229,7 +237,7 @@ public class Properties {
 	}
 
 	public void setSecurityDeposit(float securityDeposit) {
-		this.SecurityDeposit = securityDeposit;
+		SecurityDeposit = securityDeposit;
 	}
 
 	public boolean isAvailable() {
@@ -237,13 +245,6 @@ public class Properties {
 	}
 
 	public void setAvailable(boolean available) {
-		this.Available = available;
+		Available = available;
 	}
-	
-	
-	
-	
-	
-	
-
 }
