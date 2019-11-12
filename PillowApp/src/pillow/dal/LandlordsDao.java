@@ -113,7 +113,7 @@ public class LandlordsDao extends UsersDao {
         }
     }
 
-    public Landlords getTenantsFromUserName(String userName) throws SQLException {
+    public Landlords getLandlordsFromUserName(String userName) throws SQLException {
         // To build an BlogUser object, we need the Persons record, too.
         String selectLandlords =
                 "SELECT * FROM Landlords WHERE UserName=?;";
