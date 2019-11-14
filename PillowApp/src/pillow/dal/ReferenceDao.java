@@ -1,11 +1,13 @@
 package pillow.dal;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import pillow.model.Reference;
+import pillow.model.Tenants;
 import pillow.model.Users;
 
 public class ReferenceDao {
@@ -101,6 +103,44 @@ public class ReferenceDao {
     }
     return null;
   }
+  
+  public Reference getReferenceFromUserName(String userName) throws SQLException {
+	    String selectReference = "SELECT* FROM Reference WHERE UserName = ?;";
+	    Connection connection = null;
+	    PreparedStatement selectStmt = null;
+	    ResultSet results = null;
+	    try {
+	      connection = connectionManager.getConnection();
+	      selectStmt = connection.prepareStatement(selectReference);
+	      selectStmt.setString(1, userName);
+	      results = selectStmt.executeQuery();
+	      UsersDao usersDao = UsersDao.getInstance();
+	      if(results.next()) {
+	        int resultReferenceId = results.getInt("ReferenceId");
+	        String name = results.getString("Name");
+	        String phone = results.getString("Phone");
+	        String username = results.getString("UserName");
+
+	        Users user = usersDao.getUserByUserName(username);
+	        return new Reference(resultReferenceId, name, phone, user);
+	        
+	      }
+	    } catch (SQLException e) {
+	      e.printStackTrace();
+	      throw e;
+	    } finally {
+	      if (connection != null) {
+	        connection.close();
+	      }
+	      if (selectStmt != null) {
+	        selectStmt.close();
+	      }
+	      if (results != null) {
+	        results.close();
+	      }
+	    }
+	    return null;
+	  }
 
   public Reference delete(Reference reference) throws SQLException {
     String deleteReference = "DELETE FROM Reference WHERE ReferenceId=?;";
