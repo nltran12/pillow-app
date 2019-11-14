@@ -49,7 +49,6 @@ public class PropertyAvailabilityUpdate extends HttpServlet {
 				throw new IOException(e);
 	        }
         }
-        
         req.getRequestDispatcher("/UserUpdate.jsp").forward(req, resp);
 	}
 	
