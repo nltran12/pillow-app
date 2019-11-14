@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import pillow.model.LandlordReviews;
 import pillow.model.Landlords;
 import pillow.model.Reviews;
 import pillow.model.TenantReviews;
@@ -27,7 +30,7 @@ public class TenantReviewsDao extends ReviewsDao {
     Reviews review = create(new Reviews(tenantReviews.getCreated(), tenantReviews.getRating(),
         tenantReviews.getContent()));
 
-    String insertTenantReview = "INSERT INTO TenantReviews(TenantUserName,ReviewerUserName) VALUES"
+    String insertTenantReview = "INSERT INTO TenantReviews(Tenant,Reviewer) VALUES"
         + "(?,?);";
     Connection connection = null;
     PreparedStatement insertStmt = null;
@@ -96,6 +99,57 @@ public class TenantReviewsDao extends ReviewsDao {
       }
     }
     return null;
+  }
+
+  public List<TenantReviews> getTenantReviewsFromUserName(String tenantUserName)
+      throws SQLException {
+    List<TenantReviews> tenantReviews = new ArrayList<TenantReviews>();
+    String selectTenantReviews =
+        "SELECT TenantReviews.ReviewId AS ReviewId,Created,Rating,Content,Tenant,Reviewer  " +
+            "FROM LandlordReviews INNER JOIN Landlords " +
+            "  ON LandlordReviews.Landlord = Landlords.UserName " +
+            "WHERE Landlords.UserName=?;";
+    Connection connection = null;
+    PreparedStatement selectStmt = null;
+    ResultSet results = null;
+
+    try {
+      connection = connectionManager.getConnection();
+      selectStmt = connection.prepareStatement(selectTenantReviews);
+      selectStmt.setString(1, tenantUserName);
+      results = selectStmt.executeQuery();
+
+      TenantsDao tenantsDao = TenantsDao.getInstance();
+      LandlordsDao landlordsDao = LandlordsDao.getInstance();
+      while(results.next()) {
+        int reviewId = results.getInt("ReviewId");
+        Date created = new Date(results.getTimestamp("Created").getTime());
+        float rating = results.getFloat("Rating");
+        String content = results.getString("Content");
+        String reviewerUserName = results.getString("Reviewer");
+        String resultTenantUserName = results.getString("Landlord");
+
+        Tenants tenant = tenantsDao.getTenantsFromUserName(reviewerUserName);
+        Landlords reviewer = landlordsDao.getLandlordsFromUserName(resultTenantUserName);
+        TenantReviews tenantReview = new TenantReviews(reviewId, created, rating, content,
+            reviewer, tenant);
+        tenantReviews.add(tenantReview);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(selectStmt != null) {
+        selectStmt.close();
+      }
+      if(results != null) {
+        results.close();
+      }
+    }
+    return tenantReviews;
   }
 
   public TenantReviews delete(TenantReviews tenantReviews) throws SQLException {
