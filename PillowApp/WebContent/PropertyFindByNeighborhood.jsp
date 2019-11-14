@@ -32,7 +32,7 @@
 		</tr>
 		<c:forEach items="${properties}" var="property">
 			<tr>
-				<td><a href="findproperty?propertyid=<c:out value="${property.getPropertyId()}"/>"><c:out value="${property.getPropertyId()}" /></a></td>
+				<td><c:out value="${property.getPropertyId()}" /></td>
 				<td><c:out value="${property.getTitle()}" /></td>
 			</tr>
 		</c:forEach>

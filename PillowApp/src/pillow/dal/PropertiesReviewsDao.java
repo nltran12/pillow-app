@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import pillow.model.Properties;
 import pillow.model.PropertyReviews;
 import pillow.model.Reviews;
@@ -27,15 +29,16 @@ public class PropertiesReviewsDao extends ReviewsDao {
     Reviews review = create(new Reviews(propertyReviews.getCreated(), propertyReviews.getRating(),
         propertyReviews.getContent()));
 
-    String insertPropertyReview = "INSERT INTO PropertyReviews(PropertyId,"
-        + "ReviewerUserName) VALUES(?,?);";
+    String insertPropertyReview = "INSERT INTO PropertyReviews(ReviewId,PropertyId,"
+        + "Reviewer) VALUES(?,?,?);";
     Connection connection = null;
     PreparedStatement insertStmt = null;
     try {
       connection = connectionManager.getConnection();
       insertStmt = connection.prepareStatement(insertPropertyReview);
-      insertStmt.setInt(1, propertyReviews.getProperty().getPropertyId());
-      insertStmt.setString(2, propertyReviews.getReviewer().getUserName());
+      insertStmt.setInt(1, review.getReviewId());
+      insertStmt.setInt(2, propertyReviews.getProperty().getPropertyId());
+      insertStmt.setString(3, propertyReviews.getReviewer().getUserName());
       insertStmt.executeUpdate();
 
       propertyReviews.setReviewId(review.getReviewId());
@@ -97,6 +100,55 @@ public class PropertiesReviewsDao extends ReviewsDao {
       }
     }
     return null;
+  }
+
+  public List<PropertyReviews> getPropertyReviewsByPropertyId(int propertyId) throws SQLException {
+    List<PropertyReviews> propertyReviews = new ArrayList<>();
+    String selectPropertyReview =
+        "SELECT PropertyReviews.PropertyId AS ReviewId,Created,Rating,Content,PropertyId,Reviewer"
+            + " FROM PropertyReviews INNER JOIN Reviews " +
+            "  ON PropertyReviews.PropertyId = Reviews.PropertyId " +
+            "WHERE PropertyReviews.PropertyId=?;";
+    Connection connection = null;
+    PreparedStatement selectStmt = null;
+    ResultSet results = null;
+    try {
+      connection = connectionManager.getConnection();
+      selectStmt = connection.prepareStatement(selectPropertyReview);
+      selectStmt.setInt(1, propertyId);
+      results = selectStmt.executeQuery();
+
+      PropertiesDao propertiesDao = PropertiesDao.getInstance();
+      TenantsDao tenantsDao = TenantsDao.getInstance();
+      while (results.next()) {
+        int reviewId = results.getInt("ReviewId");
+        Date created = new Date(results.getTimestamp("Created").getTime());
+        float rating = results.getFloat("Rating");
+        String content = results.getString("Content");
+        int resultPropertyId = results.getInt("PropertyId");
+        String reviewerUsername = results.getString("Reviewer");
+
+        Properties property = propertiesDao.getPropertiesById(resultPropertyId);
+        Tenants reviewer = tenantsDao.getTenantsFromUserName(reviewerUsername);
+        PropertyReviews propertyReview = new PropertyReviews(reviewId, created, rating, content,
+            property, reviewer);
+        propertyReviews.add(propertyReview);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(selectStmt != null) {
+        selectStmt.close();
+      }
+      if(results != null) {
+        results.close();
+      }
+    }
+    return propertyReviews;
   }
 
   public PropertyReviews delete(PropertyReviews propertyReviews) throws SQLException {
