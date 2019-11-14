@@ -18,7 +18,8 @@ public class UsersDao {
     }
 
     public Users create(Users user) throws SQLException {
-        String insertUser = "INSERT INTO Users(UserName,Password,FirstName,LastName,Email,Phone) VALUES(?,?,?,?,?,?,?);";
+        String insertUser = "INSERT INTO Users(UserName,Password,FirstName,LastName,Email,DoB,Phone)"
+                            + " VALUES(?,?,?,?,?,?,?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         try {
@@ -30,7 +31,7 @@ public class UsersDao {
             insertStmt.setString(3, user.getFirstName());
             insertStmt.setString(4, user.getLastName());
             insertStmt.setString(5, user.getEmail());
-            insertStmt.setDate(6, (Date) user.getDoB());
+            insertStmt.setTimestamp(6, new Timestamp(user.getDoB().getTime()));
             insertStmt.setString(7, user.getPhone());
 
             insertStmt.executeUpdate();

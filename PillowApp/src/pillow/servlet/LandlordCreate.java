@@ -34,7 +34,7 @@ public class LandlordCreate extends HttpServlet {
   		Map<String, String> messages = new HashMap<String, String>();
   		req.setAttribute("messages", messages);
   		// Just render the JSP.   
-  		// req.getRequestDispatcher("/LandlordCreate.jsp").forward(req, resp);
+  		req.getRequestDispatcher("/LandlordCreate.jsp").forward(req, resp);
 	}
   	
   	@Override
@@ -53,18 +53,18 @@ public class LandlordCreate extends HttpServlet {
         	String password = req.getParameter("password");
         	String firstName = req.getParameter("firstname");
         	String lastName = req.getParameter("lastname");
-            String email = req.getParameter("email");
-            String phone = req.getParameter("phone");
+          String email = req.getParameter("email");
+          String phone = req.getParameter("phone");
         	// dob must be in the format yyyy-mm-dd.
         	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         	String stringDob = req.getParameter("dob");
         	Date dob = new Date();
         	String typeStr = req.getParameter("businesstype");
-        	Landlords.BusinessType businessType;
+        	Landlords.BusinessType businessType = Landlords.BusinessType.valueOf("INDEPENDENT");
         			
         	try {
         		dob = dateFormat.parse(stringDob);
-        		businessType = Landlords.BusinessType.valueOf(typeStr);
+        		//businessType = Landlords.BusinessType.valueOf(typeStr);
             	
         	} catch (Exception e) {
         		e.printStackTrace();

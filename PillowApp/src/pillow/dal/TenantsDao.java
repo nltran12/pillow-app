@@ -24,8 +24,8 @@ public class TenantsDao extends UsersDao {
     create(new Users(tenants.getUserName(), tenants.getPassword(), tenants.getFirstName(), tenants.getLastName(),
         tenants.getEmail(), tenants.getDoB(), tenants.getPhone()));
 
-    String insertBlogUser = "INSERT INTO Tenants(UserName, Password, FirstName, LastName,"
-        + "Email, DoB, Phone, CreditScore, Income, BackgroundCheck) VALUES(?,?,?,?,?,?,?,?,?,?);";
+    String insertBlogUser = "INSERT INTO Tenants(UserName, CreditScore, Income, BackgroundCheck) "
+                          + " VALUES(?,?,?,?);";
     Connection connection = null;
     PreparedStatement insertStmt = null;
     try {

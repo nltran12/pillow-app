@@ -6,12 +6,12 @@ public class Landlords extends Users {
 	protected BusinessType BusinessType;
 	
 	public enum BusinessType {
-		independent, propertyManager
+		INDEPENDENT, MANAGER
 	}
 
 
 	public Landlords(String userName, String password, String firstName, String lastName, String email, Date doB,
-			String phone, pillow.model.Landlords.BusinessType businessType) {
+			String phone, Landlords.BusinessType businessType) {
 		super(userName, password, firstName, lastName, email, doB, phone);
 		this.BusinessType = businessType;
 	}

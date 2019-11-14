@@ -7,9 +7,8 @@ import pillow.model.Users;
 import java.sql.*;
 
 public class LandlordsDao extends UsersDao {
-    private static LandlordsDao instance = null;
-    protected ConnectionManager connectionManager;
-
+    private static LandlordsDao instance;
+   
     protected LandlordsDao() {
         super();
     }
@@ -26,13 +25,12 @@ public class LandlordsDao extends UsersDao {
         create(new Users(landlord.getUserName(), landlord.getPassword(), landlord.getFirstName(),
                 landlord.getLastName(), landlord.getEmail(), landlord.getDoB(), landlord.getPhone()));
 
-        String insertTenant = "INSERT INTO Tenants(UserName, Password, FirstName, LastName," +
-                "Email, DoB, Phone, CreditScore, Income, BackgroundCheck) VALUES(?,?,?,?,?,?,?,?,?,?);";
+        String insertLandlord = "INSERT INTO Landlords(UserName, BusinessType) VALUES(?,?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         try {
             connection = connectionManager.getConnection();
-            insertStmt = connection.prepareStatement(insertTenant);
+            insertStmt = connection.prepareStatement(insertLandlord);
             insertStmt.setString(1, landlord.getUserName());
             insertStmt.setString(2,landlord.getBusinessType().name());
             insertStmt.executeUpdate();
@@ -51,17 +49,17 @@ public class LandlordsDao extends UsersDao {
     }
 
     /**
-     * Update the LastName of the BlogUsers instance.
+     * Update the BusinessType of the Landlords instance.
      * This runs a UPDATE statement.
      */
     public Landlords updateBusinessType(Landlords landlords, Landlords.BusinessType newBusinessType) throws SQLException {
-        String updateLandlords = "UPDATE Tenants SET Type=? WHERE UserName=?;";
+        String updateLandlords = "UPDATE Landlords SET Type=? WHERE UserName=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
         try {
             connection = connectionManager.getConnection();
             updateStmt = connection.prepareStatement(updateLandlords);
-            updateStmt.setString(1, String.valueOf(newBusinessType));
+            updateStmt.setString(1, String.valueOf(newBusinessType).toUpperCase());
             updateStmt.setString(2, landlords.getUserName());
             updateStmt.executeUpdate();
 
