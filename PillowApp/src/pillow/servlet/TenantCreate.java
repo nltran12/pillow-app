@@ -35,7 +35,7 @@ public class TenantCreate extends HttpServlet {
   		Map<String, String> messages = new HashMap<String, String>();
   		req.setAttribute("messages", messages);
   		// Just render the JSP.   
-  		// req.getRequestDispatcher("/TenantCreate.jsp").forward(req, resp);
+  		req.getRequestDispatcher("/TenantCreate.jsp").forward(req, resp);
 	}
   	
   	@Override
@@ -54,8 +54,8 @@ public class TenantCreate extends HttpServlet {
         	String password = req.getParameter("password");
         	String firstName = req.getParameter("firstname");
         	String lastName = req.getParameter("lastname");
-            String email = req.getParameter("email");
-            String phone = req.getParameter("phone");
+          String email = req.getParameter("email");
+          String phone = req.getParameter("phone");
         	// dob must be in the format yyyy-mm-dd.
         	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         	String stringDob = req.getParameter("dob");

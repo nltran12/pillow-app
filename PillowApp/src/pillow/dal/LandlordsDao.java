@@ -115,8 +115,11 @@ public class LandlordsDao extends UsersDao {
 
     public Landlords getLandlordsFromUserName(String userName) throws SQLException {
         // To build an BlogUser object, we need the Persons record, too.
-        String selectLandlords =
-                "SELECT * FROM Landlords WHERE UserName=?;";
+        String selectLandlords = "SELECT Landlords.UserName AS UserName, PassWord, " +
+              "FirstName, LastName, DoB, Phone, BusinessType" +
+              "FROM Landlords INNER JOIN Users " +
+              "  ON Landlords.UserName = Users.UserName " +
+              "WHERE Landlords.UserName=?;";
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;

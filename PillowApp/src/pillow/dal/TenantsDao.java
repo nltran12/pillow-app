@@ -156,4 +156,32 @@ public class TenantsDao extends UsersDao {
     }
     return null;
   }
+  
+  public Tenants updateBackgroundCheck(Tenants user, boolean newCheck) throws SQLException {
+    String updateBackgroundCheck = "UPDATE Tenants SET BackgroundCheck=? WHERE UserName=?;";
+    Connection connection = null;
+    PreparedStatement updateStmt = null;
+    try {
+      connection = connectionManager.getConnection();
+      updateStmt = connection.prepareStatement(updateBackgroundCheck);
+      updateStmt.setBoolean(1, newCheck);
+      updateStmt.setString(2, user.getUserName());
+      updateStmt.executeUpdate();
+
+      user.setBackgroundCheck(newCheck);
+      return user;
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(updateStmt != null) {
+        updateStmt.close();
+      }
+    }
+
+  }
 }
