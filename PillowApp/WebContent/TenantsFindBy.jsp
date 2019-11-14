@@ -45,6 +45,10 @@
 	<table border="1">
 		<tr>
 			<th>User Name</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Phone</th>
+			<th>Email</th>
 			<th>Credit Score</th>
 			<th>Background Check</th>
 			<th>Income</th>
@@ -52,6 +56,10 @@
 		<c:forEach items="${tenants}" var="tenant">
 			<tr>
 				<td><c:out value="${tenant.getUserName()}" /></td>
+				<td><c:out value="${tenant.getFirstName()}" /></td>
+				<td><c:out value="${tenant.getLastName()}" /></td>
+				<td><c:out value="${tenant.getPhone()}" /></td>
+				<td><c:out value="${tenant.getEmail()}" /></td>
 				<td><c:out value="${tenant.getCreditScore()}" /></td>
 				<td><c:out value="${tenant.isBackgroundCheck()}" /></td>
 				<td><c:out value="${tenant.getIncome()}" /></td>

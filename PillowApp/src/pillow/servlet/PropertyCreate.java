@@ -31,7 +31,7 @@ public class PropertyCreate extends HttpServlet {
   	Map<String, String> messages = new HashMap<String, String>();
 		req.setAttribute("messages", messages);
 		// Just render the JSP.   
-		// req.getRequestDispatcher("/PropertyCreate.jsp").forward(req, resp);
+		req.getRequestDispatcher("/PropertyCreate.jsp").forward(req, resp);
 	}
   	
 	@Override
@@ -45,31 +45,31 @@ public class PropertyCreate extends HttpServlet {
     // Retrieve and validate name.
     String userName = req.getParameter("username");
     if (userName == null || userName.trim().isEmpty()) {
-        messages.put("success", "Invalid UserName");
+      messages.put("success", "Invalid UserName");
     } else {
     	// Create the Property.
     	Landlords landlord = new Landlords(userName);
-        String title = req.getParameter("title");
-        String description = req.getParameter("description");
-        boolean transit = Boolean.valueOf(req.getParameter("transit"));
-        
-        // not sure how we're going to display this (??)
-        String picture = req.getParameter("picture");
-        String street = req.getParameter("street");
-        String neighborhood = req.getParameter("neighborhood");
-        String city = req.getParameter("city");
-        String state = req.getParameter("state");
-        int zip = Integer.valueOf(req.getParameter("zip"));
-        float latitude = Float.valueOf(req.getParameter("latitude"));
-        float longitude = Float.valueOf(req.getParameter("longitude"));
-        String propertyType = req.getParameter("propertytype");
-        String roomType = req.getParameter("roomtype");
-        int accommodates = Integer.valueOf(req.getParameter("accommodates"));
-        float bathrooms = Float.valueOf(req.getParameter("bathrooms"));
-        int bedrooms = Integer.valueOf(req.getParameter("bedrooms"));
-        float monthlyPrice = Float.valueOf(req.getParameter("monthlyprice"));
-        float securityDeposit = Float.valueOf(req.getParameter("securitydeposit"));
-        boolean available = Boolean.valueOf(req.getParameter("available"));
+      String title = req.getParameter("title");
+      String description = req.getParameter("description");
+      boolean transit = Boolean.valueOf(req.getParameter("transit"));
+      
+      // not sure how we're going to display this (??)
+      String picture = req.getParameter("picture");
+      String street = req.getParameter("street");
+      String neighborhood = req.getParameter("neighborhood");
+      String city = req.getParameter("city");
+      String state = req.getParameter("state");
+      int zip = Integer.parseInt(req.getParameter("zip"));
+      float latitude = Float.valueOf(req.getParameter("latitude"));
+      float longitude = Float.valueOf(req.getParameter("longitude"));
+      String propertyType = req.getParameter("propertytype");
+      String roomType = req.getParameter("roomtype");
+      int accommodates = Integer.valueOf(req.getParameter("accommodates"));
+      float bathrooms = Float.valueOf(req.getParameter("bathrooms"));
+      int bedrooms = Integer.valueOf(req.getParameter("bedrooms"));
+      float monthlyPrice = Float.valueOf(req.getParameter("monthlyprice"));
+      float securityDeposit = Float.valueOf(req.getParameter("securitydeposit"));
+      boolean available = Boolean.valueOf(req.getParameter("available"));
     	
     			
     	try {
@@ -77,7 +77,7 @@ public class PropertyCreate extends HttpServlet {
     		landlord = landlordsDao.getLandlordsFromUserName(userName);
     	} catch (Exception e) {
     		e.printStackTrace();
-		throw new IOException(e);
+    		throw new IOException(e);
     	}
       try {
       	// Exercise: parse the input for StatusLevel.

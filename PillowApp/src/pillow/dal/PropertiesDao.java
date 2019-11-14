@@ -29,8 +29,8 @@ public class PropertiesDao {
 	public Properties create(Properties property) throws SQLException {
 		String insertProperty =
 				"INSERT INTO Properties(UserName,Title,Description,Transit,Picture,Street,"
-						+ "Neighborhood,City,State,Zip,Latitude,Longitude,PropertyType,RoomType,Accomodates,"
-						+ "Bathrooms,Bedrooms,MonthlyPrice,SecurityDesposit,Available) VALUES(?,?,?,?,?,?,?,"
+						+ "Neighborhood,City,State,Zip,Latitude,Longitude,PropertyType,RoomType,Accommodates,"
+						+ "Bathrooms,Bedrooms,MonthlyPrice,SecurityDeposit,Available) VALUES(?,?,?,?,?,?,?,"
 						+ "?,?,?,?,?,?,?,?,?,?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
