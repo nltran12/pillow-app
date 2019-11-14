@@ -91,9 +91,7 @@ public class PropertyCreate extends HttpServlet {
 				e.printStackTrace();
 				throw new IOException(e);
 	        }
-        }
-        
+        }    
         req.getRequestDispatcher("/PropertyCreate.jsp").forward(req, resp);
     }
-
 }
