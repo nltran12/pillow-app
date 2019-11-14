@@ -25,7 +25,7 @@ public class LandlordsDao extends UsersDao {
         create(new Users(landlord.getUserName(), landlord.getPassword(), landlord.getFirstName(),
                 landlord.getLastName(), landlord.getEmail(), landlord.getDoB(), landlord.getPhone()));
 
-        String insertLandlord = "INSERT INTO Landlords(UserName, BusinessType) VALUES(?,?);";
+        String insertLandlord = "INSERT INTO Landlords(UserName, Type) VALUES(?,?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         try {
@@ -113,11 +113,11 @@ public class LandlordsDao extends UsersDao {
 
     public Landlords getLandlordsFromUserName(String userName) throws SQLException {
         // To build an BlogUser object, we need the Persons record, too.
-        String selectLandlords = "SELECT Landlords.UserName AS UserName, PassWord, " +
-              "FirstName, LastName, DoB, Phone, BusinessType" +
-              "FROM Landlords INNER JOIN Users " +
-              "  ON Landlords.UserName = Users.UserName " +
-              "WHERE Landlords.UserName=?;";
+        String selectLandlords = "SELECT Landlords.UserName AS UserName, Password, " +
+              "FirstName, LastName, DoB, Email, Phone, Type" +
+              " FROM Users INNER JOIN Landlords" +
+              " ON Landlords.UserName = Users.UserName" +
+              " WHERE Users.UserName=?;";
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
@@ -128,15 +128,15 @@ public class LandlordsDao extends UsersDao {
             results = selectStmt.executeQuery();
             if (results.next()) {
                 String resultUserName = results.getString("UserName");
-                String PassWord = results.getString("PassWord");
+                String Password = results.getString("Password");
                 String firstName = results.getString("FirstName");
                 String lastName = results.getString("LastName");
-                String Emails = results.getString("Emails");
+                String email = results.getString("Email");
                 Date dob = new Date(results.getTimestamp("DoB").getTime());
                 String Phone = results.getString("Phone");
                 Landlords.BusinessType businessType = Landlords.BusinessType
-                        .valueOf(results.getString("BusinessType"));
-                Landlords landlord = new Landlords(resultUserName, PassWord, firstName, lastName, Emails, dob, Phone,
+                        .valueOf(results.getString("Type"));
+                Landlords landlord = new Landlords(resultUserName, Password, firstName, lastName, email, dob, Phone,
                         businessType);
                 return landlord;
             }

@@ -44,8 +44,8 @@
 			<p>
 				<label for="businesstype">Business Type</label>
 				<select id="businesstype" name="businesstype">
-				  <option selected value=independent>Independent</option>
-				  <option value=manager>Property Manager</option>
+				  <option selected value="independent">Independent</option>
+				  <option value="manager">Property Manager</option>
 				</select>
 			</p>
 			
