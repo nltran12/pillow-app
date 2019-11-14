@@ -45,11 +45,11 @@ public class PropertyAvailabilityUpdate extends HttpServlet {
         		}
         		req.setAttribute("property", property);
         	} catch (SQLException | NumberFormatException e) {
-				e.printStackTrace();
-				throw new IOException(e);
+    				e.printStackTrace();
+    				throw new IOException(e);
 	        }
         }
-        req.getRequestDispatcher("/UserUpdate.jsp").forward(req, resp);
+        req.getRequestDispatcher("/AvailabilityUpdate.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -86,7 +86,7 @@ public class PropertyAvailabilityUpdate extends HttpServlet {
 	        }
         }
         
-        req.getRequestDispatcher("/UserUpdate.jsp").forward(req, resp);
+        req.getRequestDispatcher("/AvailabilityUpdate.jsp").forward(req, resp);
     }
 	
 }
