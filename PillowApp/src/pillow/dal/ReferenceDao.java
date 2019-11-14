@@ -6,6 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import pillow.model.Properties;
 import pillow.model.Reference;
 import pillow.model.Tenants;
 import pillow.model.Users;
@@ -104,7 +108,8 @@ public class ReferenceDao {
     return null;
   }
   
-  public Reference getReferenceFromUserName(String userName) throws SQLException {
+  public List<Reference> getReferenceFromUserName(String userName) throws SQLException {
+	  List<Reference> references = new ArrayList<Reference>();
 	    String selectReference = "SELECT* FROM Reference WHERE UserName = ?;";
 	    Connection connection = null;
 	    PreparedStatement selectStmt = null;
@@ -122,7 +127,8 @@ public class ReferenceDao {
 	        String username = results.getString("UserName");
 
 	        Users user = usersDao.getUserByUserName(username);
-	        return new Reference(resultReferenceId, name, phone, user);
+	        Reference reference =  new Reference(resultReferenceId, name, phone, user);
+	        references.add(reference);
 	        
 	      }
 	    } catch (SQLException e) {
@@ -139,7 +145,7 @@ public class ReferenceDao {
 	        results.close();
 	      }
 	    }
-	    return null;
+	    return references;
 	  }
 
   public Reference delete(Reference reference) throws SQLException {
