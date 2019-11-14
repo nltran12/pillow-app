@@ -6,12 +6,12 @@
   </welcome-file-list>
   <!--
   <servlet>
-    <servlet-name>FindUsers</servlet-name>
-    <servlet-class>blog.servlet.FindUsers</servlet-class>
+    <servlet-name>PropertyFindByNeighborhood</servlet-name>
+    <servlet-class>pillow.servlet.PropertyFindByNeighborhood</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>FindUsers</servlet-name>
-    <url-pattern>/findusers</url-pattern>
+    <servlet-name>PropertyFindByNeighborhood</servlet-name>
+    <url-pattern>/findpropertiesbyneighborhood</url-pattern>
   </servlet-mapping>
   -->
 </web-app>
