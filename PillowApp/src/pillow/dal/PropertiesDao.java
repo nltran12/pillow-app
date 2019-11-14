@@ -285,4 +285,32 @@ public class PropertiesDao {
       }
     }
   }
+  
+  public Properties updatePropertyAvailability(Properties property, boolean newAvailability) throws SQLException {
+		String updateAvailibility = "UPDATE Properties SET Available=? WHERE PropertyId=?;";
+		Connection connection = null;
+		PreparedStatement updateStmt = null;
+		try {
+			connection = connectionManager.getConnection();
+			updateStmt = connection.prepareStatement(updateAvailibility);
+			updateStmt.setBoolean(1, newAvailability);
+			updateStmt.setInt(2, property.getPropertyId());
+			updateStmt.executeUpdate();
+			
+			property.setAvailable(newAvailability);;
+			return property;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(updateStmt != null) {
+				updateStmt.close();
+			}
+		}
+	  
+  }
 }
