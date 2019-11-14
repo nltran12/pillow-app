@@ -1,9 +1,12 @@
 package pillow.dal;
 
+import pillow.model.Properties;
 import pillow.model.Tenants;
 import pillow.model.Users;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TenantsDao extends UsersDao {
   private static TenantsDao instance = null;
@@ -182,6 +185,42 @@ public class TenantsDao extends UsersDao {
         updateStmt.close();
       }
     }
-
+  }
+  
+  public List<Tenants> getTenantsWithRestraints(int minCreditScore, boolean backgroundCheck, 
+                                                  int minIncome) throws SQLException {
+    List<Tenants> tenants = new ArrayList<Tenants>();
+    String selectTenants = "SELECT UserName FROM Tenants "
+        + "WHERE CreditScore >= ? AND BackgroundCheck=? AND Income >= ?;";
+    Connection connection = null;
+    PreparedStatement selectStmt = null;
+    ResultSet results = null;
+    try {
+      connection = connectionManager.getConnection();
+      selectStmt = connection.prepareStatement(selectTenants);
+      selectStmt.setInt(1, minCreditScore);
+      selectStmt.setBoolean(2, backgroundCheck);
+      selectStmt.setInt(3, minIncome);
+      results = selectStmt.executeQuery();
+      while (results.next()) {
+        String userName = results.getString("UserName");
+        Tenants tenant = getTenantsFromUserName(userName);
+        tenants.add(tenant);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(selectStmt != null) {
+        selectStmt.close();
+      }
+      if(results != null) {
+        results.close();
+      }
+    }
+    return tenants;
   }
 }
