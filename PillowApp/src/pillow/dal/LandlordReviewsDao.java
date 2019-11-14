@@ -1,5 +1,6 @@
 package pillow.dal;
 
+import java.util.Date;
 import pillow.model.*;
 
 import java.sql.Connection;
@@ -26,7 +27,7 @@ public class LandlordReviewsDao extends ReviewsDao {
 	
 	public LandlordReviews create(LandlordReviews landlordReview) throws SQLException {
 		
-		create(new Reviews(landlordReview.getReviewId(), landlordReview.getCreated(),
+		Reviews review = create(new Reviews(landlordReview.getReviewId(), landlordReview.getCreated(),
 			landlordReview.getRating(), landlordReview.getContent()));
 
 		String insertAdministrator = "INSERT INTO LandlordReviews(ReviewId, Reviewer, Landlord) VALUES(?,?,?);";
@@ -36,11 +37,12 @@ public class LandlordReviewsDao extends ReviewsDao {
 		try {
 			connection = connectionManager.getConnection();
 			insertStmt = connection.prepareStatement(insertAdministrator);
-			insertStmt.setInt(1, landlordReview.getReviewId());
+			insertStmt.setInt(1, review.getReviewId());
 			insertStmt.setString(2, landlordReview.getReviewer().getUserName());
 			insertStmt.setString(3, landlordReview.getLandlord().getUserName());
 			insertStmt.executeUpdate();
-			
+
+			landlordReview.setReviewId(review.getReviewId());
 			return landlordReview;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -55,63 +57,34 @@ public class LandlordReviewsDao extends ReviewsDao {
 		}
 	}
 	
-
-	public LandlordReviews delete(LandlordReviews landlordReview) throws SQLException {
-		String deleteAdministrator = "DELETE FROM LandlordReviews WHERE UserName=?;";
-		Connection connection = null;
-		PreparedStatement deleteStmt = null;
-		
-		try {
-			connection = connectionManager.getConnection();
-			deleteStmt = connection.prepareStatement(deleteAdministrator);
-			deleteStmt.setString(1, landlordReview.getLandlord().getUserName());
-			deleteStmt.executeUpdate();
-
-			super.delete(landlordReview);
-
-			return null;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			if(connection != null) {
-				connection.close();
-			}
-			if(deleteStmt != null) {
-				deleteStmt.close();
-			}
-		}
-	}
-	
-	public LandlordReviews getlandlordReviewFromUserName(String landlordUsername) throws SQLException {
-		List<LandlordReviews> landlordReviews = new ArrayList<LandlordReviews>();
+	public LandlordReviews getlandlordReviewFromId(int reviewId) throws SQLException {
 		String selectLandlordReviews =
-			"SELECT LandlordReviews.ReviewId AS ReviewId, Reviewer, Landlord " +
-			"FROM LandlordReviews INNER JOIN Landlords " +
-			"  ON LandlordReviews.Landlord = Landlords.UserName " +
-			"WHERE Landlords.UserName=?;";
+			"SELECT LandlordReviews.ReviewId AS ReviewId,Created,Rating,Content,Landlord,Reviewer " +
+			"FROM LandlordReviews INNER JOIN Reviews " +
+			"  ON LandlordReviews.ReviewId = Reviews.ReviewId " +
+			"WHERE LandlordReviews.ReviewId=?;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
 		try {
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectLandlordReviews);
-			selectStmt.setString(1, landlordUsername);
+			selectStmt.setInt(1, reviewId);
 			results = selectStmt.executeQuery();
-			
+
+			TenantsDao tenantsDao = TenantsDao.getInstance();
+			LandlordsDao landlordsDao = LandlordsDao.getInstance();
 			if (results.next()) {
-				int reviewId = results.getInt("ReviewId");
-				String reviewer = results.getString("Reviewer");
-				String landlord = results.getString("Landlord");
-				
-				Reviews review = getReviewById(reviewId);
-				TenantsDao tenantDao = TenantsDao.getInstance();
-				LandlordsDao landlordDao = LandlordsDao.getInstance();
-			
-				LandlordReviews landlordReview = new LandlordReviews(review.getReviewId(),
-						review.getCreated(), review.getRating(), review.getContent(),
-						tenantDao.getTenantsFromUserName(reviewer), landlordDao.getLandlordsFromUserName(landlord));
-				landlordReviews.add(landlordReview);
+				int resultReviewId = results.getInt("ReviewId");
+				Date created = new Date(results.getTimestamp("Created").getTime());
+				float rating = results.getFloat("Rating");
+				String content = results.getString("Content");
+				String reviewerUserName = results.getString("Reviewer");
+				String landlordUserName = results.getString("Landlord");
+
+				Tenants reviewer = tenantsDao.getTenantsFromUserName(reviewerUserName);
+				Landlords landlord = landlordsDao.getLandlordsFromUserName(landlordUserName);
+				return new LandlordReviews(resultReviewId, created, rating, content, reviewer, landlord);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -130,11 +103,11 @@ public class LandlordReviewsDao extends ReviewsDao {
 		return null;
 	}
 
-	public List<LandlordReviews> getLandlordReviewsFromLandlordUserName(String landlordUsername)
+	public List<LandlordReviews> getLandlordReviewsFromUserName(String landlordUsername)
 			throws SQLException {
 		List<LandlordReviews> landlordReviews = new ArrayList<LandlordReviews>();
 		String selectLandlordReviews =
-			"SELECT LandlordReviews.ReviewId AS ReviewId, Reviewer, Landlord " +
+			"SELECT LandlordReviews.ReviewId AS ReviewId,Created,Rating,Content,Landlord,Reviewer  " +
 			"FROM LandlordReviews INNER JOIN Landlords " +
 			"  ON LandlordReviews.Landlord = Landlords.UserName " +
 			"WHERE Landlords.UserName=?;";
@@ -147,22 +120,23 @@ public class LandlordReviewsDao extends ReviewsDao {
 			selectStmt = connection.prepareStatement(selectLandlordReviews);
 			selectStmt.setString(1, landlordUsername);
 			results = selectStmt.executeQuery();
-			
+
+			TenantsDao tenantsDao = TenantsDao.getInstance();
+			LandlordsDao landlordsDao = LandlordsDao.getInstance();
 			while(results.next()) {
 				int reviewId = results.getInt("ReviewId");
-				String reviewer = results.getString("Reviewer");
-				String landlord = results.getString("Landlord");
-				
-				Reviews review = getReviewById(reviewId);
-				TenantsDao tenantDao = TenantsDao.getInstance();
-				LandlordsDao landlordDao = LandlordsDao.getInstance();
-			
-				LandlordReviews landlordReview = new LandlordReviews(review.getReviewId(),
-						review.getCreated(), review.getRating(), review.getContent(),
-						tenantDao.getTenantsFromUserName(reviewer), landlordDao.getLandlordsFromUserName(landlord));
+				Date created = new Date(results.getTimestamp("Created").getTime());
+				float rating = results.getFloat("Rating");
+				String content = results.getString("Content");
+				String reviewerUserName = results.getString("Reviewer");
+				String resultLandlordUserName = results.getString("Landlord");
+
+				Tenants reviewer = tenantsDao.getTenantsFromUserName(reviewerUserName);
+				Landlords landlord = landlordsDao.getLandlordsFromUserName(resultLandlordUserName);
+				LandlordReviews landlordReview = new LandlordReviews(reviewId, created, rating, content,
+						reviewer, landlord);
 				landlordReviews.add(landlordReview);
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -178,5 +152,32 @@ public class LandlordReviewsDao extends ReviewsDao {
 			}
 		}
 		return landlordReviews;
+	}
+
+	public LandlordReviews delete(LandlordReviews landlordReview) throws SQLException {
+		String deleteAdministrator = "DELETE FROM LandlordReviews WHERE ReviewId=?;";
+		Connection connection = null;
+		PreparedStatement deleteStmt = null;
+
+		try {
+			connection = connectionManager.getConnection();
+			deleteStmt = connection.prepareStatement(deleteAdministrator);
+			deleteStmt.setInt(1, landlordReview.getReviewId());
+			deleteStmt.executeUpdate();
+
+			super.delete(landlordReview);
+
+			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(deleteStmt != null) {
+				deleteStmt.close();
+			}
+		}
 	}
 }
