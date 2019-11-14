@@ -31,7 +31,7 @@ public class ReferenceCreate extends HttpServlet {
   		Map<String, String> messages = new HashMap<String, String>();
   		req.setAttribute("messages", messages);
   		// Just render the JSP.   
-  		// req.getRequestDispatcher("/ReferenceCreate.jsp").forward(req, resp);
+  		req.getRequestDispatcher("/ReferenceCreate.jsp").forward(req, resp);
 	}
   	
   	@Override
@@ -40,7 +40,7 @@ public class ReferenceCreate extends HttpServlet {
         // Map for storing messages.
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
-        UsersDao usersDao = UsersDao.getInstance(); 
+        TenantsDao tenantsDao = TenantsDao.getInstance(); 
         
         // Retrieve and validate name.
         String userName = req.getParameter("username");
@@ -48,16 +48,17 @@ public class ReferenceCreate extends HttpServlet {
             messages.put("success", "Invalid UserName");
         } else {
         	// Create the Tenant.
-        	Users user = new Users(userName);
+        	Tenants user = new Tenants(userName);
         	String referenceName = req.getParameter("name");
             String phone = req.getParameter("phone");
             
 	        try {
 	        	// Exercise: parse the input for StatusLevel.
-	        	user = usersDao.getUserByUserName(userName);
+	        	user = tenantsDao.getTenantsFromUserName(userName);
 	        	Reference reference = new Reference(referenceName, phone, user);
 	        	reference = referenceDao.create(reference);
-	        	messages.put("success", "Successfully created " + userName);
+	        	messages.put("success", "Successfully created reference " 
+	        	          + referenceName + " for " + userName);
 	        } catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
