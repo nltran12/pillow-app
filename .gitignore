@@ -24,3 +24,4 @@ hs_err_pid*
 
 # OS files
 .DS_Store
+.DS_Store?
