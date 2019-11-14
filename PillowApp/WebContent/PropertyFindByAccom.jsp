@@ -11,11 +11,11 @@
 <title>Find Properties</title>
 </head>
 <body>
-	<form action="findpropertiesbyneighborhood" method="post">
-		<h1>Search for Properties by Neighborhood</h1>
+	<form action="findpropertiesbyaccom" method="post">
+		<h1>Search for Properties by Accommodation Size</h1>
 		<p>
-			<label for="neighborhood">Neighborhood</label>
-			<input id="neighborhood" name="neighborhood" value="${fn:escapeXml(param.neighborhood)}">
+			<label for="accom">Accommodates</label>
+			<input id="accom" name="accom" value="${fn:escapeXml(param.accom)}">
 		</p>
 		<p>
 			<input type="submit">
