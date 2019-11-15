@@ -19,7 +19,7 @@
 		</p>
 		<p>
 			<label for="rating">Rating</label>
-			<select id="rating" name="rating" value="${fn:escapeXml(param.rating)}">
+			<select id="rating" name="rating">
 				<option value="1.0">1.0</option>
 			    <option value="2.0">2.0</option>
 			    <option value="3.0">3.0</option>
