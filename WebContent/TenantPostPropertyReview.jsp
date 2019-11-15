@@ -22,8 +22,14 @@
         <input id="tenantUsername" name="tenantUsername" value="">
     </p>
     <p>
-        <label for="rating">Rating (0.0 - 5.0)</label>
-        <input id="rating" name="rating" value="">
+        <label for="rating">Rating</label>
+        <select id="rating" name="rating" value="${fn:escapeXml(param.rating)}">
+            <option value="1.0">1.0</option>
+            <option value="2.0">2.0</option>
+            <option value="3.0">3.0</option>
+            <option value="4.0">4.0</option>
+            <option value="5.0">5.0</option>
+        </select>
     </p>
     <p>
         <label for="content">Review Content</label>

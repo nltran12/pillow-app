@@ -52,7 +52,7 @@ public class ReferenceFindByTenant extends HttpServlet {
       // in the input box when rendering FindUsers.jsp.
       messages.put("previousFirstName", tenant);
     }
-    req.setAttribute("references", references);
+    req.setAttribute("tenants", references);
 
     req.getRequestDispatcher("/ReferenceFindByTenant.jsp").forward(req, resp);
   }
