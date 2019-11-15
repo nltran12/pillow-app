@@ -30,15 +30,16 @@ public class TenantReviewsDao extends ReviewsDao {
     Reviews review = create(new Reviews(tenantReviews.getCreated(), tenantReviews.getRating(),
         tenantReviews.getContent()));
 
-    String insertTenantReview = "INSERT INTO TenantReviews(Tenant,Reviewer) VALUES"
-        + "(?,?);";
+    String insertTenantReview = "INSERT INTO TenantReviews(ReviewId,Tenant,Reviewer) VALUES"
+        + "(?,?,?);";
     Connection connection = null;
     PreparedStatement insertStmt = null;
     try {
       connection = connectionManager.getConnection();
       insertStmt = connection.prepareStatement(insertTenantReview);
-      insertStmt.setString(1, tenantReviews.getTenant().getUserName());
-      insertStmt.setString(2, tenantReviews.getReviewer().getUserName());
+      insertStmt.setInt(1, review.getReviewId());
+      insertStmt.setString(2, tenantReviews.getTenant().getUserName());
+      insertStmt.setString(3, tenantReviews.getReviewer().getUserName());
       insertStmt.executeUpdate();
 
       tenantReviews.setReviewId(review.getReviewId());
