@@ -120,7 +120,7 @@ public class ReferenceDao {
 	      selectStmt.setString(1, userName);
 	      results = selectStmt.executeQuery();
 	      UsersDao usersDao = UsersDao.getInstance();
-	      if(results.next()) {
+	      while(results.next()) {
 	        int resultReferenceId = results.getInt("ReferenceId");
 	        String name = results.getString("Name");
 	        String phone = results.getString("Phone");
