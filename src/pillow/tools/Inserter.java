@@ -47,7 +47,7 @@ public class Inserter {
     }
     
     // getPropertiesByNeighborhoodAndMinRating
-    properties = propertiesDao.getPropertiesByNeighborhoodAndMinRating("Capitol Hill", 2.5f);
+    properties = propertiesDao.getPropertiesByNeighborhoodAndMaxRent("Capitol Hill", 2.5f);
     for (Properties prop : properties) {
       System.out.format("Reading property: id:%s title:%s \n", prop.getPropertyId(),
           prop.getTitle());

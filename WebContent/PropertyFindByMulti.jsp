@@ -18,15 +18,8 @@
 			<input id="neighborhood" name="neighborhood" value="${fn:escapeXml(param.neighborhood)}">
 		</p>
 		<p>
-			<label for="rating">Rating</label>
-			<select id="rating" name="rating">
-				<option value="1.0">1.0</option>
-			    <option value="2.0">2.0</option>
-			    <option value="3.0">3.0</option>
-			    <option value="4.0">4.0</option>
-			    <option value="5.0">5.0</option>			    
-			</select>
-		</p>
+			<label for="price">Price</label>
+			<input id="price" name="price" value="${fn:escapeXml(param.price)}">
 		<p>
 			<input type="submit">
 			<br /> <br /> <br />

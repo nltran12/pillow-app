@@ -215,8 +215,8 @@ public class PropertiesDao {
 		return properties;
 	}
 
-	public List<Properties> getPropertiesByNeighborhoodAndMinRating(String neighborhood,
-			float rating) throws SQLException {
+	public List<Properties> getPropertiesByNeighborhoodAndMaxRent(String neighborhood,
+			float price) throws SQLException {
 		List<Properties> properties = new ArrayList<Properties>();
 		String selectProperty = "SELECT PropertyId FROM Properties WHERE MonthlyPrice <= ? "
 				+ "AND NEIGHBORHOOD = ?";
@@ -226,8 +226,8 @@ public class PropertiesDao {
 		try {
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectProperty);
-			selectStmt.setString(1, neighborhood);
-			selectStmt.setFloat(2, rating);
+			selectStmt.setFloat(1, price);
+	     selectStmt.setString(2, neighborhood);
 			results = selectStmt.executeQuery();
 			while (results.next()) {
 				int propertyId = results.getInt("PropertyId");

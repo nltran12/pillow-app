@@ -49,19 +49,19 @@ public class PropertyFindByMulti extends HttpServlet {
 
     // Parameters
     String neighborhood = req.getParameter("neighborhood");
-    float rating = Float.parseFloat(req.getParameter("rating"));
+    float price = Float.parseFloat(req.getParameter("price"));
     
     if (neighborhood == null || neighborhood.trim().isEmpty()) {
       messages.put("result", "Please enter a valid neighborhood.");
     } else {
       // Retrieve properties and store as a message.
       try {
-        properties = propertiesDao.getPropertiesByNeighborhoodAndMinRating(neighborhood, rating);
+        properties = propertiesDao.getPropertiesByNeighborhoodAndMaxRent(neighborhood, price);
       } catch (SQLException e) {
         e.printStackTrace();
         throw new IOException(e);
       }
-      messages.put("result", "Displaying results for " + neighborhood + ", " + rating);
+      messages.put("result", "Displaying results for " + neighborhood + ", " + price);
     }
     req.setAttribute("properties", properties);
 
