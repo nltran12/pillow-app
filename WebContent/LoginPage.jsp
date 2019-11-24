@@ -16,7 +16,7 @@
 			<h1>Login</h1>
 			<form action="login" method="post">
 				<p>
-					<label for="username">UserName</label>
+					<label for="username">Username</label>
 					<input id="username" name="username">
 				</p>
 				<p>
@@ -29,9 +29,9 @@
 				</div>
 				<button type=submit class="btn btn-primary">Submit</button>
 			</form>
-			<span>
-				
-				<a href="/PillowApp/tenantcreate" class="btn btn-primary" style="margin: 10px 0px">Register</a>
+			<span>		
+				<a href="./tenantcreate" class="btn btn-primary" style="margin: 10px 0px">Register as tenant</a>
+				<a href="./landlordcreate" class="btn btn-primary" style="margin: 10px 0px">Register as landlord</a>		
 			</span>
 		</div>
 	</body>
