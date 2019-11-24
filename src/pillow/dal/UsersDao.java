@@ -70,7 +70,7 @@ public class UsersDao {
                 String email = results.getString("Email");
                 Date DoB = results.getDate("DoB");
                 String phone = results.getString("Phone");
-                Users user = new Users(resultUserName, firstName, lastName, password, email, DoB, phone);
+                Users user = new Users(resultUserName, password, firstName, lastName, email, DoB, phone);
                 return user;
             }
         } catch (SQLException e) {
@@ -113,6 +113,7 @@ public class UsersDao {
             }
         }
     }
+  
 }
 
 
