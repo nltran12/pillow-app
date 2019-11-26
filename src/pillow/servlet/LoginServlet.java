@@ -53,10 +53,6 @@ public class LoginServlet extends HttpServlet {
         e.printStackTrace();
         throw new IOException(e);
       }
-      /*
-      req.setAttribute("user", user);
-      req.getRequestDispatcher("/LoginPage.jsp").forward(req, resp);
-      */
       
       if (user == null || !user.getPassword().equals(password)) {
         // invalid login
@@ -65,7 +61,7 @@ public class LoginServlet extends HttpServlet {
       } else {
         HttpSession session = req.getSession(true);
         session.setAttribute("currentUser", user);
-        resp.sendRedirect("LoggedIn.jsp");
+        resp.sendRedirect("./tenantaccountinfo?username=" + userName);
       }
   }
 }

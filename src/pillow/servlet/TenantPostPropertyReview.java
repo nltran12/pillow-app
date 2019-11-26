@@ -43,28 +43,8 @@ public class TenantPostPropertyReview extends HttpServlet {
     // Map for storing messages.
     Map<String, String> messages = new HashMap<String, String>();
     req.setAttribute("messages", messages);
-
-    List<PropertyReviews> propertyReviews = new ArrayList<>();
-
-    String propertyId = req.getParameter("propertyId");
-    if (propertyId == null || propertyId.trim().isEmpty()) {
-      messages.put("result", "Please enter a valid landlord username.");
-    } else {
-      // Retrieve landlord Reviews and store as a message.
-      try {
-        propertyReviews = propertiesReviewsDao.getPropertyReviewsByPropertyId(Integer.valueOf(propertyId));
-      } catch (SQLException e) {
-        e.printStackTrace();
-        throw new IOException(e);
-      }
-      messages.put("result", "Displaying results for " + propertyId);
-
-      // Save the previous search term, so it can be used as the default
-      // in the input box when rendering FindUsers.jsp.
-      messages.put("previousUsername", propertyId);
-    }
-    req.setAttribute("reviews", propertyId);
-
+    messages.put("username", req.getParameter("username"));
+    messages.put("propertyId", req.getParameter("propertyId"));
     // Just render the JSP.
     req.getRequestDispatcher("/TenantPostPropertyReview.jsp").forward(req, resp);
   }
@@ -78,7 +58,7 @@ public class TenantPostPropertyReview extends HttpServlet {
 
     // Retrieve info and validate (may change depending on how UI goes).
     String propertyId = req.getParameter("propertyId");
-    String tenantUsername = req.getParameter("tenantUsername");
+    String tenantUsername = req.getParameter("username");
     if (propertyId == null || propertyId.trim().isEmpty()) {
       messages.put("success", "Invalid propertyId");
     } else if (tenantUsername == null || tenantUsername.trim().isEmpty()) {

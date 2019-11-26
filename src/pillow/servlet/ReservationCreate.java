@@ -68,7 +68,6 @@ public class ReservationCreate extends HttpServlet {
     } else if (propertyId == null || propertyId.trim().isEmpty()) {
       messages.put("success", "Invalid property id");
     } else {
-
       Properties property;
       Tenants tenant;
       try {

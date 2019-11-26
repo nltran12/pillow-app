@@ -39,28 +39,6 @@ public class TenantPostLandlordReview extends HttpServlet {
     // Map for storing messages.
     Map<String, String> messages = new HashMap<String, String>();
     req.setAttribute("messages", messages);
-
-    List<LandlordReviews> landlordReviews = new ArrayList<>();
-
-    String landlordUsername = req.getParameter("landlordUsername");
-    if (landlordUsername == null || landlordUsername.trim().isEmpty()) {
-      messages.put("result", "Please enter a valid landlord username.");
-    } else {
-      // Retrieve landlord Reviews and store as a message.
-      try {
-        landlordReviews = landlordReviewsDao.getLandlordReviewsFromUserName(landlordUsername);
-      } catch (SQLException e) {
-        e.printStackTrace();
-        throw new IOException(e);
-      }
-      messages.put("result", "Displaying results for " + landlordUsername);
-
-      // Save the previous search term, so it can be used as the default
-      // in the input box when rendering FindUsers.jsp.
-      messages.put("previousUsername", landlordUsername);
-    }
-    req.setAttribute("reviews", landlordReviews);
-
     // Just render the JSP.
     req.getRequestDispatcher("/TenantPostLandlordReview.jsp").forward(req, resp);
   }

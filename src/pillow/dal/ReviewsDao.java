@@ -25,7 +25,6 @@ public class ReviewsDao {
 		return instance;
 	}
 
-
 	public Reviews create(Reviews review) throws SQLException {
 		String insertReviews =
 				"INSERT INTO Reviews(ReviewId, Created, Rating, Content) " +
@@ -69,11 +68,6 @@ public class ReviewsDao {
 			}
 		}
 	}
-
-	/*
-	
-	
-	 */
 
 	public Reviews getReviewById(int reviewId) throws SQLException{
 		String selectReview = "SELECT * FROM Reviews WHERE ReviewId=?;";
@@ -169,9 +163,7 @@ public class ReviewsDao {
 		}
 		
 	}
-	
 
-	
 	public Reviews delete(Reviews review) throws SQLException {
 		String deleteReviews = "DELETE FROM Reviews WHERE ReviewId=?;";
 		Connection connection = null;
@@ -197,6 +189,4 @@ public class ReviewsDao {
 			}
 		}
 	}
-	
-
 }

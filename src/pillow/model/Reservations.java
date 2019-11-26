@@ -79,4 +79,8 @@ public class Reservations {
 	public void setNumOccupants(int numOccupants) {
 		this.numOccupants = numOccupants;
 	}
+
+	public boolean hasEnded() {
+		return this.endDate.before(new Date());
+	}
 }
