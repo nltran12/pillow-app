@@ -2,51 +2,89 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+
+<%@ page language="java" 
+	contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Find a Property</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">	
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Property Info</title>
 </head>
 <body>
-	<form action="findproperty" method="post">
-		<h1>Search for a Property by PropertyId</h1>
-		<p>
-			<label for="propertyid">PropertyId</label>
-			<input id="propertyid" name="propertyid" value="${fn:escapeXml(param.propertyid)}">
-		</p>
-		<p>
-			<input type="submit">
-			<br/><br/><br/>
-			<span id="resultMessage"><b>${messages.result}</b></span>
-		</p>
-	</form>
-	<br/>
-	<h1>Property Info</h1>
-	<ul>
-		<li><b>PropertyId</b>: <c:out value="${property.getPropertyId()}" /></li>
-		<li><b>Title</b>: <c:out value="${property.getTitle()}" /></li>
-		<li><b>UserName</b>: <c:out value="${property.getUser().getUserName()}" /></li>
-		<li><b>Description</b>: <c:out value="${property.getDescription()}" /></li>
-		<li><b>Transit</b>: <c:out value="${property.isTransit()}" /></li>
-<!-- 		<li><b>Picture</b>:</li> -->
-		<li><b>Street</b>: <c:out value="${property.getStreet()}" /></li>
-		<li><b>Neighborhood</b>: <c:out value="${property.getNeighborhood()}" /></li>
-		<li><b>City</b>: <c:out value="${property.getCity()}" /></li>
-		<li><b>State</b>: <c:out value="${property.getState()}" /></li>
-		<li><b>Zip</b>: <c:out value="${property.getZip()}" /></li>
-<!-- 		<li><b>Latitude</b>:</li>
-		<li><b>Longitude</b>:</li> -->
-		<li><b>PropertyType</b>: <c:out value="${property.getPropertyType()}" /></li>
-		<li><b>RoomType</b>: <c:out value="${property.getRoomType()}" /></li>
-		<li><b>Accommodates</b>: <c:out value="${property.getAccomodates()}" /></li>
-		<li><b>Bathrooms</b>: <c:out value="${property.getBathrooms()}" /></li>
-		<li><b>Bedrooms</b>: <c:out value="${property.getBedrooms()}" /></li>
-		<li><b>MonthlyPrice</b>: <c:out value="${property.getMonthlyPrice()}" /></li>
-		<li><b>SecurityDeposit</b>: <c:out value="${property.getSecurityDeposit()}" /></li>
-		<li><b>Available</b>: <c:out value="${property.isAvailable()}" /></li>
-	</ul>
+	<h1 style="text-align: center; padding: 20px 20px 0px;">${property.getTitle()}</h1>
+	<h5 style="text-align: center;"><b>Hosted by: </b> ${property.getUser().getFirstName()} ${property.getUser().getLastName()}</h5>
+	<div class="container" style="padding: 20px 0px;">
+		<div class="row">
+			<div class="col-lg-8">
+				<img src="${property.getPicture()}" class="img-fluid" style="width: 100%"/>
+
+				<ul class="list-group list-group-horizontal">
+					<li class="list-group-item" 
+						style="border: none; max-width: 75px; text-align: center; padding-left: 0px;"> 
+							${property.getAccomodates()} Guests
+					</li>
+					<li class="list-group-item" 
+						style="border: none; max-width: 130px; text-align: center;">
+						${property.getBathrooms()} Bathrooms
+					</li>
+					<li class="list-group-item" 
+						style="border: none; max-width: 120px; text-align: center;">
+						${property.getBedrooms()} Bedrooms
+					</li>
+					<li class="list-group-item" 
+						style="border: none; text-align: center; padding: 1.5em 1.25em; max-width: 150px;">
+						${property.getPropertyType()} 
+					</li>				
+				</ul>
+		      	
+	
+				<h3>Description:</h3>
+				<p>${property.getDescription()}</p>
+		      
+			    <div class="row">
+			      	<div class="col">
+			      		<div><b>Close to transit:</b>  ${property.isTransit() ? 'Yes' : 'No'}</div>
+			      		<div><b>Room Type:</b> ${property.getRoomType()}</div>
+			      		<div><b>Security Deposit:</b> $<fmt:formatNumber type="number" value="${property.getSecurityDeposit()}"/></div>
+		      		</div>
+		      		<div class="col">
+			      		<div><b>Neighborhood:</b> ${property.getNeighborhood()} </div>
+			      		<div><b>City:</b> ${property.getCity()}</div>
+			      		<div><b>State:</b> ${property.getState()}</div>
+			      	</div>
+		    	</div>		
+		    </div>
+			<div class="col-lg-4">
+				<h5 style="margin: 0px;">$<fmt:formatNumber type="number" minFractionDigits="2" value="${property.getMonthlyPrice()}"/></h5>
+				<p>per month</p>
+				<h3>Reserve a place now!</h3>
+				<form class="row form-group" action="reservationcreate" method="post">
+					<label class="col-4 col-form-label">Check in:</label>
+					<div class="col-8">
+				    	<input class="form-control" type="date" 
+				    			value="2019-12-01" id="checkIn" name="startDate">
+				  	</div>
+
+					<label class="col-4 col-form-label">Check out:</label>
+					<div class="col-8">
+				    	<input class="form-control" type="date" 
+				    			value="2020-01-01" id="checkOut" name="endDate">
+				  	</div>
+				  	<label class="col-4 col-form-label">Number of Guests:</label>
+					<div class="col-8">
+				    	<input class="form-control" type="text" 
+				    			value="1" id="numOfGuests" name="numOccupants">
+				  	</div>
+				  	<input type="hidden" name="propertyId" value="${property.getPropertyId()}">
+				  	<input class="btn btn-secondary btn-block" type="submit" value="Book"> 
+				</form>
+				
+			</div>
+		</div>
+	</div>
 </body>
 </html>

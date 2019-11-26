@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 @WebServlet("/findproperty")
 public class PropertyFindById extends HttpServlet {
 
@@ -50,7 +49,6 @@ public class PropertyFindById extends HttpServlet {
       messages.put("result", "Displaying results for " + propertyId);
     }
     req.setAttribute("property", property);
-
     req.getRequestDispatcher("/PropertyFindById.jsp").forward(req, resp);
   }
 
@@ -79,7 +77,6 @@ public class PropertyFindById extends HttpServlet {
       messages.put("result", "Displaying results for " + propertyId);
     }
     req.setAttribute("property", property);
-
     req.getRequestDispatcher("/PropertyFindById.jsp").forward(req, resp);
   }
 }

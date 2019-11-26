@@ -24,8 +24,8 @@ import pillow.model.Reservations;
 import pillow.model.Tenants;
 import pillow.model.Users;
 
-@WebServlet("/reservationcreate")
-public class ReservationCreate extends HttpServlet {
+@WebServlet("/reservationconfirm")
+public class ReservationConfirm extends HttpServlet {
 
   protected PropertiesDao propertiesDao;
   protected TenantsDao tenantsDao;
@@ -68,6 +68,7 @@ public class ReservationCreate extends HttpServlet {
     } else if (propertyId == null || propertyId.trim().isEmpty()) {
       messages.put("success", "Invalid property id");
     } else {
+
       Properties property;
       Tenants tenant;
       try {
@@ -96,14 +97,16 @@ public class ReservationCreate extends HttpServlet {
         throw new IOException(e);
       }
       
-      reservation = new Reservations(property, tenant, start, end, numOccupants); 
-      float duration = (end.getTime() - start.getTime()) / (1000*60*60*24);
-      monthlyTotal = (float) Math.ceil(duration / 31) * property.getMonthlyPrice();
-      total = monthlyTotal + property.getSecurityDeposit();
+      try {
+        reservation = new Reservations(property, tenant, start, end, numOccupants); 
+        reservation = reservationsDao.create(reservation);
+        messages.put("success", "Successfully created reservation for " + tenantUsername);
+      } catch (SQLException e) {
+        e.printStackTrace();
+        throw new IOException(e);
+      }      
     }
     req.setAttribute("reservation", reservation);
-    req.setAttribute("total", total);
-    req.setAttribute("monthly", monthlyTotal);
-    req.getRequestDispatcher("/ReservationConfirmation.jsp").forward(req, resp);
+    req.getRequestDispatcher("/ReservationCompleted.jsp").forward(req, resp);
   }
 }

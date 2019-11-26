@@ -65,8 +65,8 @@ public class ReservationDelete extends HttpServlet {
 		        	messages.put("disableSubmit", "false");
 		        }
 	        } catch (SQLException | NumberFormatException e) {
-				e.printStackTrace();
-				throw new IOException(e);
+    				e.printStackTrace();
+    				throw new IOException(e);
 	        }
         }
         
