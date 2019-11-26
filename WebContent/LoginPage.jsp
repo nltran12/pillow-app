@@ -27,11 +27,11 @@
 				<div style="color: red">
 					<span id="successMessage"><b>${messages.success}</b></span>
 				</div>
-				<button type=submit class="btn btn-primary">Submit</button>
+				<button type=submit class="btn btn-secondary">Submit</button>
 			</form>
 			<span>		
-				<a href="./tenantcreate" class="btn btn-primary" style="margin: 10px 0px">Register as tenant</a>
-				<a href="./landlordcreate" class="btn btn-primary" style="margin: 10px 0px">Register as landlord</a>		
+				<a href="./tenantcreate" class="btn btn-secondary" style="margin: 10px 0px">Register as tenant</a>
+				<a href="./landlordcreate" class="btn btn-secondary" style="margin: 10px 0px">Register as landlord</a>		
 			</span>
 		</div>
 	</body>

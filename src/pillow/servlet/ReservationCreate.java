@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import pillow.dal.LandlordsDao;
 import pillow.dal.PropertiesDao;
 import pillow.dal.ReservationsDao;
@@ -20,6 +22,7 @@ import pillow.model.Landlords;
 import pillow.model.Properties;
 import pillow.model.Reservations;
 import pillow.model.Tenants;
+import pillow.model.Users;
 
 @WebServlet("/reservationcreate")
 public class ReservationCreate extends HttpServlet {
@@ -42,7 +45,7 @@ public class ReservationCreate extends HttpServlet {
     Map<String, String> messages = new HashMap<String, String>();
     req.setAttribute("messages", messages);
     // Just render the JSP.
-    req.getRequestDispatcher("/ReservationCreate.jsp").forward(req, resp);
+    req.getRequestDispatcher("/ReservationConfirmation.jsp").forward(req, resp);
   }
 
   @Override
@@ -53,9 +56,14 @@ public class ReservationCreate extends HttpServlet {
     req.setAttribute("messages", messages);
 
     // Retrieve and validate parameters.
-    String tenantUsername = req.getParameter("tenantUsername");
+    Reservations reservation = null;
+    float total = 0;
+    float monthlyTotal = 0;
+    HttpSession session = req.getSession(true);
+    Users user = (Users) session.getAttribute("currentUser");
+    String tenantUsername = "Bryce";
     String propertyId = req.getParameter("propertyId");
-    if (tenantUsername == null || tenantUsername.trim().isEmpty()) {
+    if (tenantUsername.trim().isEmpty()) {
       messages.put("success", "Invalid tenant UserName");
     } else if (propertyId == null || propertyId.trim().isEmpty()) {
       messages.put("success", "Invalid property id");
@@ -88,17 +96,18 @@ public class ReservationCreate extends HttpServlet {
         e.printStackTrace();
         throw new IOException(e);
       }
+      
+      reservation = new Reservations(property, tenant, start, end, numOccupants); 
+      float duration = (end.getTime() - start.getTime()) / (1000*60*60*24);
+      monthlyTotal = (float) Math.ceil(duration / 31) * property.getMonthlyPrice();
+      total = monthlyTotal + property.getSecurityDeposit();
+        //reservation = reservationsDao.create(reservation);
 
-      try {
-        Reservations reservation = new Reservations(property, tenant, start, end, numOccupants);
-        reservation = reservationsDao.create(reservation);
-
-        messages.put("success", "Successfully created reservation for " + tenantUsername);
-      } catch (SQLException e) {
-        e.printStackTrace();
-        throw new IOException(e);
-      }
+        //messages.put("success", "Successfully created reservation for " + tenantUsername);
     }
-    req.getRequestDispatcher("/ReservationCreate.jsp").forward(req, resp);
+    req.setAttribute("reservation", reservation);
+    req.setAttribute("total", total);
+    req.setAttribute("monthly", monthlyTotal);
+    req.getRequestDispatcher("/ReservationConfirmation.jsp").forward(req, resp);
   }
 }
