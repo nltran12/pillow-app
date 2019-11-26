@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import pillow.model.Properties;
 import pillow.model.Reservations;
 import pillow.model.Users;
@@ -70,14 +72,14 @@ public class ReservationsDao {
   }
 
   public Reservations getReservationsById(int reservationId) throws SQLException {
-    String selectReference =
+    String selectReservation =
         "SELECT * FROM Reservations WHERE ReservationId=?;";
     Connection connection = null;
     PreparedStatement selectStmt = null;
     ResultSet results = null;
     try {
       connection = connectionManager.getConnection();
-      selectStmt = connection.prepareStatement(selectReference);
+      selectStmt = connection.prepareStatement(selectReservation);
       selectStmt.setInt(1, reservationId);
       results = selectStmt.executeQuery();
       UsersDao usersDao = UsersDao.getInstance();
@@ -109,6 +111,51 @@ public class ReservationsDao {
       }
     }
     return null;
+  }
+
+  public List<Reservations> getReservationsByUserName(String userName) throws SQLException {
+    List<Reservations> reservations = new ArrayList<>();
+    String selectReservation =
+        "SELECT * FROM Reservations WHERE UserName=?;";
+    Connection connection = null;
+    PreparedStatement selectStmt = null;
+    ResultSet results = null;
+    try {
+      connection = connectionManager.getConnection();
+      selectStmt = connection.prepareStatement(selectReservation);
+      selectStmt.setString(1, userName);
+      results = selectStmt.executeQuery();
+      UsersDao usersDao = UsersDao.getInstance();
+      PropertiesDao propertiesDao = PropertiesDao.getInstance();
+      while (results.next()) {
+        int reservationId = results.getInt("ReservationId");
+        int propertyId = results.getInt("PropertyId");
+        String resultUserName = results.getString("UserName");
+        Date startDate = new Date(results.getTimestamp("Start").getTime());
+        Date endDate = new Date(results.getTimestamp("End").getTime());
+        int numOccupants = results.getInt("NumOccupants");
+
+        Users user = usersDao.getUserByUserName(resultUserName);
+        Properties property = propertiesDao.getPropertiesById(propertyId);
+        Reservations reservation = new Reservations(reservationId, property, user, startDate,
+            endDate, numOccupants);
+        reservations.add(reservation);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(selectStmt != null) {
+        selectStmt.close();
+      }
+      if(results != null) {
+        results.close();
+      }
+    }
+    return reservations;
   }
 
   public Reservations delete(Reservations reservation) throws SQLException {
