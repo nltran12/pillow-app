@@ -16,6 +16,12 @@
         <title>Account Settings</title>
     </head>
     <body>
+    <%--Logo--%>
+    <div style="background-color: darkcyan; color: white; padding-top: 3px;
+				padding-bottom: 3px;" align="center">
+        <h1><i class="fas fa-couch"></i> Pillow</h1>
+    </div>
+    <%--Logo end--%>
     <div class="container">
         <%--Header--%>
         <div class="row">

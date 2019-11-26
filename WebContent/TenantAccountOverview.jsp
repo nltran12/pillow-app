@@ -16,6 +16,12 @@
 		<title>Account Overview</title>
 	</head>
 	<body>
+		<%--Logo--%>
+		<div style="background-color: darkcyan; color: white; padding-top: 3px;
+				padding-bottom: 3px;" align="center">
+			<h1><i class="fas fa-couch"></i> Pillow</h1>
+		</div>
+		<%--Logo end--%>
 		<div class="container">
 			<%--Header--%>
 			<div class="row">
@@ -28,13 +34,14 @@
 			</div>
 			<%--Header end--%>
 			<div class="row">
-				<h2>Current Rental:</h2>
+				<h3>Current Rental:</h3>
 			</div>
 			<c:forEach items="${tenantReservations}" var="tenantReservation">
 				<c:if test="${!tenantReservation.hasEnded()}">
 					<div class="row">
 						<div class="col-lg-3"></div>
-						<div class="col-lg-6" style="border: 1px solid black; border-radius: 2px;">
+						<div class="col-lg-6" style="border: 1px solid black; border-radius: 2px;
+						 padding-top: 10px;">
 							<ul>
 								<li><b>Property Title: </b><c:out value="${tenantReservation.getProperty().getTitle()}"/></li>
 								<li><b>Start Date: </b><fmt:formatDate value="${tenantReservation.getStartDate()}" pattern="MM-dd-yyyy"/></li>
@@ -46,13 +53,14 @@
 			</c:forEach>
 			<br/>
 			<div class="row">
-				<h2>Previous Rental(s):</h2>
+				<h3>Previous Rental(s):</h3>
 			</div>
 			<c:forEach items="${tenantReservations}" var="tenantReservation">
 				<c:if test="${tenantReservation.hasEnded()}">
 					<div class="row">
 						<div class="col-lg-3"></div>
-						<div class="col-lg-6" style="border: 1px solid black;  border-radius: 2px;">
+						<div class="col-lg-6" style="border: 1px solid black;
+						 border-radius: 2px; padding-top: 10px;">
 							<ul>
 								<li><b>Property Title: </b><c:out value="${tenantReservation.getProperty().getTitle()}"/></li>
 								<li><b>Start Date: </b><fmt:formatDate value="${tenantReservation.getStartDate()}" pattern="MM-dd-yyyy"/></li>
