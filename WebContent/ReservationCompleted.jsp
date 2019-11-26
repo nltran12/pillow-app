@@ -8,10 +8,17 @@
 <html>
 <head>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">	
+    <script src="https://kit.fontawesome.com/c37af9ab60.js" crossorigin="anonymous"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Reservation Confirmation</title>
 </head>
 <body>
+	<%--Logo--%>
+	<div style="background-color: darkcyan; color: white; padding-top: 3px;
+			padding-bottom: 3px;" align="center">
+		<h1><i class="fas fa-couch"></i> Pillow</h1>
+	</div>
+	<%--Logo end--%>
 	<div class="jumbotron jumbotron-fluid" style="min-height: 100vh;">
 		<div class="container text-center" style="margin: auto;">
 			<h1 class="display-4">Reservation Booked!</h1>
