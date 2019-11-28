@@ -88,6 +88,42 @@ public class PropertiesDao {
 		}
 	}
 
+	public List<Properties> getProperties(String city, String neighborhood, float price, int rating, int bedrooms) throws SQLException {
+	  List<Properties> properties = new ArrayList<Properties>();
+	  String selectProperty = "SELECT * FROM Properties WHERE City LIKE ? AND Neighborhood LIKE ? AND MonthlyPrice <= ? AND Bedrooms >= ? LIMIT 50;";
+	  Connection connection = null;
+	  PreparedStatement selectStmt = null;
+	  ResultSet results = null;
+	  try {
+	    connection = connectionManager.getConnection();
+	    selectStmt = connection.prepareStatement(selectProperty);
+	    selectStmt.setString(1, city);
+	    selectStmt.setString(2, neighborhood);
+	    selectStmt.setFloat(3, price);
+	    selectStmt.setInt(4, bedrooms);
+      results = selectStmt.executeQuery();
+      while (results.next()) {
+        int propertyId = results.getInt("PropertyId");
+        Properties property = getPropertiesById(propertyId);
+        properties.add(property);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    } finally {
+      if(connection != null) {
+        connection.close();
+      }
+      if(selectStmt != null) {
+        selectStmt.close();
+      }
+      if(results != null) {
+        results.close();
+      }
+    }
+    return properties;
+  }
+	
 	public Properties getPropertiesById(int propertyId) throws SQLException {
 		String selectProperty =
 				"SELECT * FROM Properties WHERE PropertyId=?;";
