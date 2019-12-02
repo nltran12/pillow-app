@@ -31,7 +31,7 @@
 			<%--Create form--%>
 			<div class="row">
 				<div class="col">
-					<form action="tenantcreate" method="post">
+					<form action="landlordcreate" method="post">
 						<div class="form-group">
 							<label style="font-weight: bold; width: 140px;" for="username">Username</label>
 							<input id="username" name="username" class="form-control-sm">

@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import pillow.dal.*;
 import pillow.model.*;
@@ -46,8 +47,10 @@ public class LandlordCreate extends HttpServlet {
 
     // Retrieve and validate name.
     String userName = req.getParameter("username");
+    Landlords landlord = null;
     if (userName == null || userName.trim().isEmpty()) {
         messages.put("success", "Invalid UserName");
+        req.getRequestDispatcher("/LandlordCreate.jsp").forward(req, resp);
     } else {
     	// Create the Tenant.
     	String password = req.getParameter("password");
@@ -72,26 +75,18 @@ public class LandlordCreate extends HttpServlet {
     	}
       try {
       	// Exercise: parse the input for StatusLevel.
-      	Landlords landlord = new Landlords(userName, password, firstName, lastName, email, 
+      	landlord = new Landlords(userName, password, firstName, lastName, email, 
       								dob, phone, businessType);
       	landlord = landlordsDao.create(landlord);
       	messages.put("success", "Successfully created " + userName);
       } catch (SQLException e) {
-        e.printStackTrace();
-        throw new IOException(e);
+        messages.put("success", "Username is already taken!");
+        req.getRequestDispatcher("/LandlordCreate.jsp").forward(req, resp);
       }
     }
-    req.getRequestDispatcher("/LandlordCreate.jsp").forward(req, resp);
+    
+    HttpSession session = req.getSession(true);
+    session.setAttribute("currentUser", landlord);
+    req.getRequestDispatcher("/TenantAccountOverview.jsp").forward(req, resp);
   }
 }
-
-/**
- * <p>
-        <label for="businesstype">Business Type</label>
-        <select id="businesstype" name="businesstype">
-          <option selected value="independent">Independent</option>
-          <option value="manager">Property Manager</option>
-        </select>
-      </p>
- */
- 

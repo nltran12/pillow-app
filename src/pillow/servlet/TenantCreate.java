@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import pillow.dal.*;
 import pillow.model.*;
@@ -47,8 +48,10 @@ public class TenantCreate extends HttpServlet {
 
         // Retrieve and validate name.
         String userName = req.getParameter("username");
+        Tenants tenant = null;
         if (userName == null || userName.trim().isEmpty()) {
             messages.put("success", "Invalid UserName");
+            req.getRequestDispatcher("/TenantCreate.jsp").forward(req, resp);
         } else {
         	// Create the Tenant.
         	String password = req.getParameter("password");
@@ -63,25 +66,29 @@ public class TenantCreate extends HttpServlet {
         	
         	int income = Integer.valueOf(req.getParameter("income"));
         	
+        	
         	try {
         		dob = dateFormat.parse(stringDob);
         	} catch (ParseException e) {
         		e.printStackTrace();
         		throw new IOException(e);
         	}
+        	
 	        try {
 	        	// Exercise: parse the input for StatusLevel.
-	        	Tenants tenant = new Tenants(userName, password, firstName, lastName, email, 
+	        	tenant = new Tenants(userName, password, firstName, lastName, email, 
 	        								dob, phone, 0, income, false);
 	        	tenant = tenantsDao.create(tenant);
-	        	messages.put("success", "Successfully created " + userName);
+	        	// messages.put("success", "Successfully created " + userName);
 	        } catch (SQLException e) {
 	          messages.put("success", "Username is already taken!");
 	          req.getRequestDispatcher("/TenantCreate.jsp").forward(req, resp);
 	        }
         }
         
-        req.getRequestDispatcher("/TenantCreate.jsp").forward(req, resp);
+        HttpSession session = req.getSession(true);
+        session.setAttribute("currentUser", tenant);
+        req.getRequestDispatcher("/TenantAccountOverview.jsp").forward(req, resp);
     }
 
 }
