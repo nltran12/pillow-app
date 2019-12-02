@@ -1,6 +1,5 @@
 package pillow.dal;
 
-import pillow.model.Properties;
 import pillow.model.Tenants;
 import pillow.model.Users;
 
@@ -160,18 +159,20 @@ public class TenantsDao extends UsersDao {
     return null;
   }
   
-  public Tenants updateBackgroundCheck(Tenants user, boolean newCheck) throws SQLException {
-    String updateBackgroundCheck = "UPDATE Tenants SET BackgroundCheck=? WHERE UserName=?;";
+  public Tenants updateBackgroundCheckInfo(Tenants user, boolean newCheck, int creditScore) throws SQLException {
+    String updateBackgroundCheck = "UPDATE Tenants SET BackgroundCheck=?, SET CreditScore=? WHERE UserName=?;";
     Connection connection = null;
     PreparedStatement updateStmt = null;
     try {
       connection = connectionManager.getConnection();
       updateStmt = connection.prepareStatement(updateBackgroundCheck);
       updateStmt.setBoolean(1, newCheck);
-      updateStmt.setString(2, user.getUserName());
+      updateStmt.setInt(2, creditScore);
+      updateStmt.setString(3, user.getUserName());
       updateStmt.executeUpdate();
 
       user.setBackgroundCheck(newCheck);
+      user.setCreditScore(creditScore);
       return user;
 
     } catch (SQLException e) {

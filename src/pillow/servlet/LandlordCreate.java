@@ -84,3 +84,14 @@ public class LandlordCreate extends HttpServlet {
     req.getRequestDispatcher("/LandlordCreate.jsp").forward(req, resp);
   }
 }
+
+/**
+ * <p>
+        <label for="businesstype">Business Type</label>
+        <select id="businesstype" name="businesstype">
+          <option selected value="independent">Independent</option>
+          <option value="manager">Property Manager</option>
+        </select>
+      </p>
+ */
+ 

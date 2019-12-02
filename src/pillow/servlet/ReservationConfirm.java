@@ -100,6 +100,7 @@ public class ReservationConfirm extends HttpServlet {
       try {
         reservation = new Reservations(property, tenant, start, end, numOccupants); 
         reservation = reservationsDao.create(reservation);
+        Properties updated = propertiesDao.updatePropertyAvailability(property, false);
         messages.put("success", "Successfully created reservation for " + tenantUsername);
       } catch (SQLException e) {
         e.printStackTrace();

@@ -26,7 +26,7 @@
 	  		<p class="lead">Check your email ${reservation.getUser().getEmail()} 
 	  			for full details!</p>
 	  			
-	  		<a href="./findpropertiesbyneighborhood"
+	  		<a href="./propertysearch"
 	  			class="btn btn-secondary">
 	  			Back to search
 	  		</a>

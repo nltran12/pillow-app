@@ -7,55 +7,81 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://kit.fontawesome.com/c37af9ab60.js" crossorigin="anonymous"></script>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Create a Landlord</title>
+		<title>Create a landlord account</title>
 	</head>
-	<body>
-		<h1>Create Landlord</h1>
-		<form action="landlordcreate" method="post">
-			<p>
-				<label for="username">UserName</label>
-				<input id="username" name="username" value="">
-			</p>
-			<p>
-				<label for="password">Password</label>
-				<input id="password" name="password" value="">
-			</p>
-			<p>
-				<label for="firstname">FirstName</label>
-				<input id="firstname" name="firstname" value="">
-			</p>
-			<p>
-				<label for="lastname">LastName</label>
-				<input id="lastname" name="lastname" value="">
-			</p>
-			<p>
-				<label for="dob">DoB (yyyy-mm-dd)</label>
-				<input id="dob" name="dob" value="">
-			</p>
-			<p>
-				<label for="email">Email</label>
-				<input id="email" name="email" value="">
-			</p>
-			<p>
-				<label for="phone">Phone</label>
-				<input id="phone" name="phone" value="">
-			</p>
-			<p>
-				<label for="businesstype">Business Type</label>
-				<select id="businesstype" name="businesstype">
-				  <option selected value="independent">Independent</option>
-				  <option value="manager">Property Manager</option>
-				</select>
-			</p>
+	<body style="background: #ededed;">
+		<%--Logo--%>
+		<div
+			style="background-color: darkcyan; color: white; padding-top: 3px; padding-bottom: 3px;"
+			align="center">
+			<h1><i class="fas fa-couch"></i> Pillow</h1>
+		</div>
+		<%--Logo end--%>
+		
+		<div class="container d-flex flex-column align-items-center justify-content-center mt-4">
+			<div class="row">
+				<div class="col" style="margin-bottom: 10px;">
+					<h2>Get started as a landlord!</h2>
+				</div>
+			</div>
 			
-			<p>
-				<input type="submit">
-			</p>
-		</form>
-		<br/><br/>
-		<p>
-			<span id="successMessage"><b>${messages.success}</b></span>
-		</p>
+			<%--Create form--%>
+			<div class="row">
+				<div class="col">
+					<form action="tenantcreate" method="post">
+						<div class="form-group">
+							<label style="font-weight: bold; width: 140px;" for="username">Username</label>
+							<input id="username" name="username" class="form-control-sm">
+						</div>
+						
+						<div class="form-group">						
+							<label style="font-weight: bold; width: 140px;" for="password">Password</label>
+							<input type="password" id="password" name="password" class="form-control-sm">							
+						</div>
+						
+						<div class="form-group">							
+							<label style="font-weight: bold; width: 140px;" for="firstname">First Name</label>
+							<input  id="firstname" name="firstname" class="form-control-sm">							
+						</div>
+						
+						<div class="form-group">							
+							<label style="font-weight: bold; width: 140px;" for="lastname">Last Name</label>
+							<input id="lastname" name="lastname" class="form-control-sm">							
+						</div>
+						
+						<div class="form-group">							
+							<label style="font-weight: bold; width: 140px;" for="dob">Date of Birth</label>
+							<input class="form-control-sm" type="date" value="2000-01-01" id="dob" name="dob">							
+						</div>
+						
+						<div class="form-group">							
+							<label style="font-weight: bold; width: 140px;" for="email">Email</label>
+							<input id="email" name="email" class="form-control-sm">							
+						</div>
+						
+						<div class="form-group">
+							<label style="font-weight: bold; width: 140px;" for="phone">Phone</label>
+							<input id="phone" name="phone" class="form-control-sm">
+						</div>
+						
+						<div class="form-group">
+							<label for="businesstype" style="font-weight: bold; width: 140px;">Business Type</label>
+							    <select id="businesstype" name="businesstype">
+							        <option selected value="independent">Independent</option>
+							        <option value="manager">Property Manager</option>
+								</select>							
+						</div>
+						<div style="color: red">
+							<span id="successMessage"><b>${messages.success}</b></span>
+						</div>
+						<button type=submit class="btn btn-secondary btn-block" style="font-size: large;">Create</button>
+					</form>		
+				</div>
+			</div>
+			<%--Create form end--%>
+		</div>
 	</body>
 </html>

@@ -60,27 +60,24 @@ public class TenantCreate extends HttpServlet {
         	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         	String stringDob = req.getParameter("dob");
         	Date dob = new Date();
-        	int creditScore = Integer.valueOf(req.getParameter("creditscore"));
-        	int income = Integer.valueOf(req.getParameter("income"));
         	
-        	// might need to change this depending on how we setting this in jsp
-        	boolean backgroundCheck = Boolean.parseBoolean(req.getParameter("bgcheck"));
+        	int income = Integer.valueOf(req.getParameter("income"));
         	
         	try {
         		dob = dateFormat.parse(stringDob);
         	} catch (ParseException e) {
         		e.printStackTrace();
-				throw new IOException(e);
+        		throw new IOException(e);
         	}
 	        try {
 	        	// Exercise: parse the input for StatusLevel.
 	        	Tenants tenant = new Tenants(userName, password, firstName, lastName, email, 
-	        								dob, phone, creditScore, income, backgroundCheck);
+	        								dob, phone, 0, income, false);
 	        	tenant = tenantsDao.create(tenant);
 	        	messages.put("success", "Successfully created " + userName);
 	        } catch (SQLException e) {
-				e.printStackTrace();
-				throw new IOException(e);
+	          messages.put("success", "Username is already taken!");
+	          req.getRequestDispatcher("/TenantCreate.jsp").forward(req, resp);
 	        }
         }
         

@@ -39,7 +39,7 @@
 			      <td>${reservation.getNumOccupants()}</td>
 			    </tr>
 			     <tr class="text-left">
-			      <th >Subtotal</th>
+			      <th >Sub-total</th>
 			      <td><fmt:formatNumber type="currency" value="${monthly}"/></td>
 			    </tr>
 			     <tr class="text-left">
