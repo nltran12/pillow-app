@@ -17,27 +17,29 @@
 </head>
 <body>
 	<%--Logo--%>
+	<% Users user = (Users) session.getAttribute("currentUser"); %>
 	<div style="background-color: darkcyan; color: white; padding-top: 3px;
-				padding-bottom: 3px;" align="center">
-		<h1><i class="fas fa-couch"></i> Pillow</h1>
+					padding-bottom: 3px;" align="center">
+		<h1><a href="./propertysearch" role="home-button"
+			   style="color: white; text-decoration: none;"><i
+				class="fas fa-couch"></i> Pillow</a></h1>
 	</div>
 	<%--Logo end--%>
 	<div class="container">
 		<%--Header--%>
-		<div class="row">
+		<div class="row" style="padding-top: 6px;">
 			<div class="col-md-12 col-lg-12" align="right">
-				<% Users user = (Users) session.getAttribute("currentUser"); %>
 				<p>Welcome <%= user.getFirstName() + " " + user.getLastName() %>
 					<a class="btn-outline-secondary" href="TenantAccountSettings.jsp" role="button">
 						<i class="fas fa-cog"></i></a></p>
 			</div>
 		</div>
 		<%--Header end--%>
-		<h1>Displaying References</h1>
-		<table border="1">
+		<h2>Current References</h2>
+		<table class="table table-bordered">
 			<tr>
-				<th>Reference Name</th>
-				<th>Phone number</th>
+				<th scope="col">Reference Name</th>
+				<th scope="col">Phone number</th>
 			</tr>
 			<c:forEach items="${references}" var="reference">
 				<tr>
@@ -46,15 +48,29 @@
 				</tr>
 			</c:forEach>
 		</table>
-	</div>
-		<form action="findreferencebytenant" method="post">
-		<h2>Search for references</h2>
-		<p>
-			<label for="tenant">Tenant</label>
-			<input id="tenant" name="tenant" value="">
-		</p>
-	</form>
-	<br />
+		<br/>
 
+		<%--ADD REFERENCE FORM--%>
+		<form action="reference" method="post">
+			<h2>Add a Reference</h2>
+			<div class="form-group row">
+				<label for="name" class="col-sm-2 col-form-label">Reference Name</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="name" name="name"
+						   placeholder="name" value=${name}>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="phone" class="col-sm-2 col-form-label">Reference Phone</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="phone" name="phone"
+						   placeholder="phone number" value=${phone}>
+				</div>
+			</div>
+			<input type="hidden" name="username" value="<%=user.getUserName()%>">
+			<button type="submit" class="btn btn-outline-secondary">Submit</button>
+		</form>
+		<%--ADD REFERENCE FORM END--%>
+	</div>
 </body>
 </html>

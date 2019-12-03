@@ -2,7 +2,9 @@ package pillow.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,8 +16,8 @@ import pillow.dal.*;
 import pillow.model.*;
 
 
-@WebServlet("/referencecreate")
-public class ReferenceCreate extends HttpServlet {
+@WebServlet("/reference")
+public class ReferenceServlet extends HttpServlet {
 	
 	protected ReferenceDao referenceDao;
 
@@ -24,14 +26,34 @@ public class ReferenceCreate extends HttpServlet {
 		referenceDao = referenceDao.getInstance();
 	}
   
-  	@Override
+	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
   		// Map for storing messages.
-  		Map<String, String> messages = new HashMap<String, String>();
-  		req.setAttribute("messages", messages);
-  		// Just render the JSP.   
-  		req.getRequestDispatcher("/ReferenceCreate.jsp").forward(req, resp);
+			Map<String, String> messages = new HashMap<String, String>();
+			req.setAttribute("messages", messages);
+
+			List<Reference> references = new ArrayList<Reference>();
+
+			String tenant = req.getParameter("username");
+			if (tenant == null || tenant.trim().isEmpty()) {
+				messages.put("result", "Please enter a valid tenant.");
+			} else {
+				// Retrieve properties and store as a message.
+				try {
+					references = referenceDao.getReferenceFromUserName(tenant);
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw new IOException(e);
+				}
+				messages.put("result", "Displaying results for " + tenant);
+				// Save the previous search term, so it can be used as the default
+				// in the input box when rendering FindUsers.jsp.
+				messages.put("previousFirstName", tenant);
+			}
+			req.setAttribute("references", references);
+
+			req.getRequestDispatcher("/Reference.jsp").forward(req, resp);
 	}
   	
   	@Override
@@ -50,20 +72,19 @@ public class ReferenceCreate extends HttpServlet {
         	// Create the Tenant.
         	Tenants user = new Tenants(userName);
         	String referenceName = req.getParameter("name");
-            String phone = req.getParameter("phone");
+        	String phone = req.getParameter("phone");
             
 	        try {
-	        	// Exercise: parse the input for StatusLevel.
 	        	user = tenantsDao.getTenantsFromUserName(userName);
 	        	Reference reference = new Reference(referenceName, phone, user);
 	        	reference = referenceDao.create(reference);
 	        	messages.put("success", "Successfully created reference " 
 	        	          + referenceName + " for " + userName);
 	        } catch (SQLException e) {
-				e.printStackTrace();
-				throw new IOException(e);
+						e.printStackTrace();
+						throw new IOException(e);
 	        }
-        }   
-        req.getRequestDispatcher("/ReferenceCreate.jsp").forward(req, resp);
+        }
+        resp.sendRedirect("./reference?username=" + userName);
     }
 }

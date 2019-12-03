@@ -16,25 +16,33 @@
 		<title>Account Overview</title>
 	</head>
 	<body>
-		<%--Logo--%>
-		<div style="background-color: darkcyan; color: white; padding-top: 3px;
+	<%--Logo--%>
+	<% Users user = (Users) session.getAttribute("currentUser"); %>
+	<div style="background-color: darkcyan; color: white; padding-top: 3px;
 				padding-bottom: 3px;" align="center">
-			<h1><i class="fas fa-couch"></i> Pillow</h1>
-		</div>
-		<%--Logo end--%>
-		<div class="container">
-			<%--Header--%>
-			<div class="row">
-				<div class="col-md-12 col-lg-12" align="right">
-					<% Users user = (Users) session.getAttribute("currentUser"); %>
-					<p>Welcome <%= user.getFirstName() + " " + user.getLastName() %>
-						<a class="btn-outline-secondary" href="TenantAccountSettings.jsp" role="button">
-							<i class="fas fa-cog"></i></a></p>
-				</div>
+		<h1><a href="./propertysearch" role="home-button"
+			   style="color: white; text-decoration: none;"><i
+				class="fas fa-couch"></i> Pillow</a></h1>
+	</div>
+	<%--Logo end--%>
+	<div class="container">
+		<%--Header--%>
+		<div class="row" style="padding-top: 6px;">
+			<div class="col-md-6 col-lg-6" align="left">
+				<a class="btn-outline-secondary btn-lg" href="./propertysearch" role="button">
+					<i class="fas fa-search"></i>Search</a>
 			</div>
-			<%--Header end--%>
+			<div class="col-md-6 col-lg-6" align="right">
+				<p>Welcome <%= user.getFirstName() + " " + user.getLastName() %>
+					<a class="btn-outline-secondary" href="TenantAccountSettings.jsp" role="button">
+						<i class="fas fa-cog"></i></a></p>
+			</div>
+		</div>
+		<%--Header end--%>
 			<div class="row">
-				<h3>Current Rental:</h3>
+				<div class="col-lg-12">
+					<h4>Current Rental:</h4>
+				</div>
 			</div>
 			<c:forEach items="${tenantReservations}" var="tenantReservation">
 				<c:if test="${!tenantReservation.hasEnded()}">
@@ -53,7 +61,9 @@
 			</c:forEach>
 			<br/>
 			<div class="row">
-				<h3>Previous Rental(s):</h3>
+				<div class="col-lg-12">
+					<h4>Previous Rental(s):</h4>
+				</div>
 			</div>
 			<c:forEach items="${tenantReservations}" var="tenantReservation">
 				<c:if test="${tenantReservation.hasEnded()}">
@@ -66,10 +76,11 @@
 								<li><b>Start Date: </b><fmt:formatDate value="${tenantReservation.getStartDate()}" pattern="MM-dd-yyyy"/></li>
 								<li><b>End Date: </b><fmt:formatDate value="${tenantReservation.getEndDate()}" pattern="MM-dd-yyyy"/></li>
 							</ul>
-							<% String url = "./tenantpostpropertyreview?username=" + user.getUserName() + "&propertyId=";
-								session.setAttribute("url", url);%>
+							<% String newUrl = "./tenantpostpropertyreview?username=" +
+									user.getUserName() + "&propertyId=";
+								session.setAttribute("newUrl", newUrl);%>
 							<c:set var="redirectUrl"
-								   value="${url}${tenantReservation.getProperty().getPropertyId()}" />
+								   value="${newUrl}${tenantReservation.getProperty().getPropertyId()}" />
 							<a href="${redirectUrl}" class="btn btn-outline-secondary"
 							   style="margin: 10px">Review Rental</a>
 						</div>

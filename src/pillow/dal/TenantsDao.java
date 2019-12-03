@@ -160,7 +160,7 @@ public class TenantsDao extends UsersDao {
   }
   
   public Tenants updateBackgroundCheckInfo(Tenants user, boolean newCheck, int creditScore) throws SQLException {
-    String updateBackgroundCheck = "UPDATE Tenants SET BackgroundCheck=?, SET CreditScore=? WHERE UserName=?;";
+    String updateBackgroundCheck = "UPDATE Tenants SET BackgroundCheck=?, CreditScore=? WHERE UserName=?;";
     Connection connection = null;
     PreparedStatement updateStmt = null;
     try {
