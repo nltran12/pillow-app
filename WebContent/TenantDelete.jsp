@@ -43,7 +43,7 @@
 						<h4>Are you sure you want to delete your account?</h4>
 					</span>
 					<span id="submitButton" <c:if test="${messages.disableSubmit}">style="display:none"</c:if>>
-						<input type="submit" value="confirm"  class="btn btn-outline-alert">
+						<input type="submit" value="confirm"  class="btn btn-outline-danger">
 						<a href="./propertysearch" class="btn btn-outline-secondary">cancel</a>
 					</span>
 					<c:if test="${messages.disableSubmit}">
