@@ -47,11 +47,12 @@
 <body>
 	<%--Logo--%>
 	<% Users user = (Users) session.getAttribute("currentUser"); %>
-	<div
-		style="background-color: darkcyan; color: white; padding-top: 3px; padding-bottom: 3px;"
-		align="center">
-		<h1><i class="fas fa-couch"></i> Pillow</h1>
-	</div>
+    <div style="background-color: darkcyan; color: white; padding-top: 3px;
+				padding-bottom: 3px;" align="center">
+        <h1><a href="./propertysearch" role="home-button"
+               style="color: white; text-decoration: none;"><i
+                class="fas fa-couch"></i> Pillow</a></h1>
+    </div>
 	<%--Logo end--%>
 	<div class="container">
 		<%--Header--%>
@@ -153,10 +154,3 @@
 	</div>
 </body>
 </html>
-
-<%-- <c:forEach items="${properties}" var="property">
-<a href="findproperty?propertyid=<c:out value="${property.getPropertyId()}"/>">
-<c:out value="${property.getPropertyId()}" />
-</a>
-<c:out value="${property.getTitle()}" />
-</c:forEach> --%>
