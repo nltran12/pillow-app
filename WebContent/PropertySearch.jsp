@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1" import="pillow.model.Users" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -46,6 +46,7 @@
 </head>
 <body>
 	<%--Logo--%>
+	<% Users user = (Users) session.getAttribute("currentUser"); %>
 	<div
 		style="background-color: darkcyan; color: white; padding-top: 3px; padding-bottom: 3px;"
 		align="center">
@@ -53,6 +54,15 @@
 	</div>
 	<%--Logo end--%>
 	<div class="container">
+		<%--Header--%>
+        <div class="row" style="padding-top: 6px;">
+            <div class="col-md-12 col-lg-12" align="right">
+                <p>Welcome <%= user.getFirstName() + " " + user.getLastName() %>
+                    <a class="btn-outline-secondary" href="TenantAccountSettings.jsp" role="button">
+                    <i class="fas fa-cog"></i></a></p>
+            </div>
+        </div>
+        <%--Header end--%>
 		<div class="row">
 		
 			<%-- search form --%>
@@ -112,21 +122,30 @@
 			
 			<%-- results --%>
 			<div class="col-8">
-			<h1>Matching Properties</h1>
-			<table border="1">
-				<tr>
-					<th>PropertyId</th>
-					<th>Title</th>
-				</tr>
-				<c:forEach items="${properties}" var="property">
-					<tr>
-						<td><a
-							href="findproperty?propertyid=<c:out value="${property.getPropertyId()}"/>"><c:out
-									value="${property.getPropertyId()}" /></a></td>
-						<td><c:out value="${property.getTitle()}" /></td>
-					</tr>
-				</c:forEach>
-			</table>
+			
+				<h1>Matching Properties</h1>
+				
+				<div class="row row-cols-1 row-cols-sm-2">
+				
+					<c:forEach items="${properties}" var="property">
+						
+						<div class="col-4 mb-4">
+							<div class="card h-100">
+								<a href="findproperty?propertyid=<c:out value="${property.getPropertyId()}"/>">
+									<img src="<c:out value="${property.getPicture()}"/>" class="card-img-top" alt="...">
+								</a>
+								<div class="card-body">
+									<a href="findproperty?propertyid=<c:out value="${property.getPropertyId()}"/>">
+										<p class="card-text"><c:out value="${property.getTitle()}"/></p>
+									</a>
+								</div>
+							</div>
+						</div>
+						
+					</c:forEach>
+					
+				</div>
+			
 			</div>
 			<%-- results end --%>
 			
@@ -134,3 +153,10 @@
 	</div>
 </body>
 </html>
+
+<%-- <c:forEach items="${properties}" var="property">
+<a href="findproperty?propertyid=<c:out value="${property.getPropertyId()}"/>">
+<c:out value="${property.getPropertyId()}" />
+</a>
+<c:out value="${property.getTitle()}" />
+</c:forEach> --%>
