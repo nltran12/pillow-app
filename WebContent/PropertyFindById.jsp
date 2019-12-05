@@ -43,6 +43,10 @@
 						${property.getBedrooms()} Bedrooms
 					</li>
 					<li class="list-group-item" 
+						style="border: none; max-width: 120px; text-align: center;">
+						${property.getBedrooms()} Bedrooms
+					</li>
+					<li class="list-group-item" 
 						style="border: none; text-align: center; padding: 1.5em 1.25em; max-width: 150px;">
 						${property.getPropertyType()} 
 					</li>				

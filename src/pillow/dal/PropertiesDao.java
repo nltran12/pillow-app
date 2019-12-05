@@ -90,7 +90,22 @@ public class PropertiesDao {
 
 	public List<Properties> getProperties(String city, String neighborhood, float price, int rating, int bedrooms) throws SQLException {
 	  List<Properties> properties = new ArrayList<Properties>();
-	  String selectProperty = "SELECT * FROM Properties WHERE City LIKE ? AND Neighborhood LIKE ? AND MonthlyPrice <= ? AND Bedrooms >= ? LIMIT 50;";
+	  String selectProperty =
+	      "SELECT Properties.PropertyId, Title, UserName, Description, Transit, Picture, Street, Neighborhood, "
+	      + "City, State, Zip, Latitude, Longitude, PropertyType, RoomType, Accommodates, Bathrooms, Bedrooms, "
+	      + "MonthlyPrice, SecurityDeposit, Available, AvgRating "
+	      + "FROM Properties LEFT OUTER JOIN "
+	      + "(Select PropertyReviews.PropertyId, AVG(Rating) AS AvgRating "
+	      + "FROM PropertyReviews INNER JOIN Reviews "
+	      + "ON PropertyReviews.ReviewId = Reviews.ReviewId "
+	      + "GROUP BY PropertyId) AS AvgRatingTable "
+	      + "ON Properties.PropertyId = AvgRatingTable.PropertyId "
+	      + "WHERE City LIKE ? "
+	      + "AND Neighborhood LIKE ? "
+	      + "AND MonthlyPrice <= ? "
+	      + "AND COALESCE(AvgRating, 0) >= ? "
+	      + "AND Bedrooms >= ? "
+	      + "LIMIT 50;";
 	  Connection connection = null;
 	  PreparedStatement selectStmt = null;
 	  ResultSet results = null;
@@ -100,7 +115,8 @@ public class PropertiesDao {
 	    selectStmt.setString(1, city);
 	    selectStmt.setString(2, neighborhood);
 	    selectStmt.setFloat(3, price);
-	    selectStmt.setInt(4, bedrooms);
+	    selectStmt.setFloat(4, rating);
+	    selectStmt.setInt(5, bedrooms);
       results = selectStmt.executeQuery();
       while (results.next()) {
         int propertyId = results.getInt("PropertyId");
